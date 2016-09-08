@@ -1,3 +1,5 @@
+package com.tenpines;
+
 import com.tenpines.Sumador;
 
 import org.junit.Before;

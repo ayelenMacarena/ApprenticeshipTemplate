@@ -23,7 +23,7 @@
     Numero 2 <input type="text" id="id2" name="Numero2" />
 </label>
 
-<button type="button" onClick=""> Sumar </button>
+<button type="button" onclick="Date"> Sumar </button>
 
 <label>
     Resultado: <output type="text" id="id3" name="Resultado" />
