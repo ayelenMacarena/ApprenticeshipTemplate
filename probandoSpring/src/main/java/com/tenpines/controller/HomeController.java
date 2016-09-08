@@ -25,10 +25,10 @@ public class HomeController {
     public ModelAndView resultado() {
         ModelAndView modelAndView = new ModelAndView();
         LocalDateTime dateNow = LocalDateTime.now();
-
+        Sumador myAcum = new Sumador();
         modelAndView.setViewName("resultadoSumador");
         modelAndView.addObject("hora", dateNow);
-
+        modelAndView.addObject("acumulador", myAcum);
 
 
         return modelAndView;
