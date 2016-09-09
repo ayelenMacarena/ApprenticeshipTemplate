@@ -1,0 +1,14 @@
+.idea/
+target/
+/out/
+db/
+.idea_modules/
+atlassian-ide-plugin.xml
+
+*.iml
+*.class
+*.jar
+*.war
+*.ear
+
+hs_err_pid*
