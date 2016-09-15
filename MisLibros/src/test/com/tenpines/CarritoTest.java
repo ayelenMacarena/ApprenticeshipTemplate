@@ -1,5 +1,7 @@
 package com.tenpines;
 
+import com.tenpines.starter.modelo.Carrito;
+import com.tenpines.starter.modelo.ProvedorDeObjetos;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,6 +17,7 @@ public class CarritoTest{
     public void setUp() {
         provedor = new ProvedorDeObjetos();
         carrito = provedor.carritoVacio();
+        carrito.inicializarCatalogo();
     }
 
     @Test
@@ -38,8 +41,8 @@ public class CarritoTest{
     @Test
     public void test004AlAgregarUnaCantidadDeItemsLaCantidadTotalDeEllosEsLaMismaCantidad(){
         carrito.agregarItem("Guerra de los mundos");
-        carrito.agregarItem("El Principito");
-        assertThat(carrito.contidadTotalDeItems()).isEqualTo(2);
+        carrito.agregarItem("Nacidos de la bruma");
+        assertThat(carrito.cantidadTotalDeItems()).isEqualTo(2);
     }
 
     @Test

@@ -1,24 +1,25 @@
 package com.tenpines.repositorioPersistencia;
 
-import com.tenpines.repositorioPersistencia.Repositorio;
+import com.tenpines.starter.modelo.Carrito;
+import com.tenpines.starter.repositorios.RepositorioDeCarritos;
 
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
-public class RepositorioTest {
+public class RepositorioDeCarritosTest {
 
-    private Repositorio repositorio;
+    private RepositorioDeCarritos repositorio;
 
     @Before
     public void setUp() {
-        repositorio = new Repositorio();
+
     }
 
     @Test
     public void test1GuardoUnItemEnElReposositorioYAlSolicitarloObtengoElMismoItem(){
-        repositorio.guardar("1","libro");
-        assertThat(repositorio.tomar("1")).isEqualTo("libro");
+        Carrito carritoPersistido = new Carrito();
+
     }
 }
