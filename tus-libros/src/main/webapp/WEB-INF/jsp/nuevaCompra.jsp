@@ -1,4 +1,5 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <html>
     <head>
@@ -39,7 +40,7 @@
         <h1 id="titulo">Carritos</h1>
 
         <ul>
-                ${carrito}
+
                 ---------------------------------------------------------
                 <li class="clt">Cliente:${cliente.getId()}</li>
                 <br/>

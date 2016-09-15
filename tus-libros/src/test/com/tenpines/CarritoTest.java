@@ -55,7 +55,7 @@ public class CarritoTest{
     }
 
     @Test
-    public void test006PreguntarPorElClienteDelCarrito(){
+    public void preguntarPorElClienteDelCarrito(){
         assertThat(carrito.tuClienteId()).isEqualTo(1);
     }
 

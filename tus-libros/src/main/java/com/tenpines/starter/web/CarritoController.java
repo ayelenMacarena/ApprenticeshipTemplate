@@ -20,58 +20,63 @@ import java.util.Map;
 public class CarritoController {
     private ServicioDeCarritos servicioCarrito;
 
-    @Autowired
     private ServicioDeCliente servicioDeCliente;
 
-    Carrito carrito = new Carrito();
+    Carrito carrito;
     Cliente unCliente;
 
     @Autowired
-    public CarritoController(ServicioDeCarritos servicioDeCarritos) {
+    public CarritoController(ServicioDeCarritos servicioDeCarritos, ServicioDeCliente servicioDeClientes) {
         this.servicioCarrito = servicioDeCarritos;
 
+        this.servicioDeCliente = servicioDeClientes;
 
     }
 
     @RequestMapping(Endpoints.HOME)
     String home(Model model) {
         model.addAttribute("carrito", obtenerUnCarrito());
+        model.addAttribute("cliente", unCliente);
         model.addAttribute("libros", catalogo());
         return "nuevaCompra";
     }
 
     @RequestMapping(value = Endpoints.AGREGAR_CARRITO, method = RequestMethod.POST)
     void crearUnCarrito(HttpServletResponse response) throws IOException {
+        //TODO: Assert que haya Cliente, si no hay cliente tirar excepcion y no dejar crear carrito.-
+        carrito = new Carrito();
         servicioCarrito.almacenar(carrito);
         response.sendRedirect(Endpoints.HOME);
 
     }
 
     @RequestMapping(value = Endpoints.AGREGAR_ITEM, method = RequestMethod.POST)
-    void agregarUnLibro(@RequestParam(value = "elemento") String unLibro, HttpServletResponse response) throws IOException {
+    void agregarUnLibro(@RequestParam(value = "libro") String unLibro, HttpServletResponse response) throws IOException {
         carrito.agregarItem(unLibro);
         servicioCarrito.almacenar(carrito);
         response.sendRedirect(Endpoints.HOME);
     }
+
 
     @RequestMapping(value = Endpoints.LOGUEAR_CLIENTE, method = RequestMethod.POST)
     private void loguearCliente( @RequestParam Map<String,String> requestParams , HttpServletResponse response) throws IOException {
         Long idUsuario =Long.valueOf(requestParams.get("nombre")).longValue();
         String password = requestParams.get("password");
         unCliente = servicioDeCliente.buscarElCliente(idUsuario);
-        if (unCliente.getPassword() == password){
-        carrito.setCliente(unCliente);}
+        //TODO: Validar si el usuario y la contraseña es correcta. Si es incorrecta que avise, sino que lo muestre.
+//        if (unCliente.getPassword().equals(password)){
+//        carrito.setCliente(unCliente);}
 
         response.sendRedirect(Endpoints.HOME);
     }
 
 
     private Carrito obtenerUnCarrito(){
-       // return servicioCarrito.buscarElCarrito(carrito.getId());
+       // return servicioCarrito.buscarElCarrito(carrito.getId()); TODO: Eventualmene lo voy a necesitar.
         return carrito;
     }
 
     private ArrayList<String> catalogo(){
-        return carrito.catalogo();
+        return Carrito.catalogo();
     }
 }

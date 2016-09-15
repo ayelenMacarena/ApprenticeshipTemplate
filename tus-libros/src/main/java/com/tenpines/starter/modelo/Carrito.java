@@ -20,7 +20,7 @@ public class Carrito {
 
 
     public Carrito(){
-        this.inicializarCatalogo();
+
        // this.cliente = new Cliente();
     }
 
@@ -42,9 +42,9 @@ public class Carrito {
         return items;
     }
 
-//    public String getCliente() {
-//        return cliente;
-//    }
+    public Cliente getCliente() {
+        return cliente;
+    }
 
     public void setCliente(Cliente cliente) {
         this.cliente = cliente;
@@ -53,9 +53,9 @@ public class Carrito {
 
     // METODOS
     @Column
-    private ArrayList<String> catalogo = new ArrayList<String>();
+    private static ArrayList<String> catalogo = new ArrayList<String>();
 
-    public void inicializarCatalogo(){
+    public static void inicializarCatalogo(){
         catalogo.add("Guerra de los mundos");
         catalogo.add("El perfume");
         catalogo.add("Nacidos de la bruma");
@@ -98,13 +98,15 @@ public class Carrito {
         return items;
     }
 
-    public int tuClienteId() {
+    public Long tuClienteId() {
 
-        //return cliente.getId_cliente();
-        return 1;
+        return cliente.getId();
+
+
     }
 
-    public ArrayList<String> catalogo() {
-        return this.catalogo;
+    public static ArrayList<String> catalogo() {
+        inicializarCatalogo();
+        return catalogo;
     }
 }

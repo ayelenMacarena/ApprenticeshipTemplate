@@ -12,17 +12,17 @@ public class Cliente {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     //@OneToOne(cascade= CascadeType.ALL)
-    private Integer id_cliente;
+    private Long id_cliente;
 
     @Column
     public String password;
 
     //PERSISTENCIA
-    private void setId_cliente(Integer unId) {
+    private void setId(Long unId) {
         this.id_cliente = unId;
     }
 
-    public Integer getId_cliente() {
+    public Long getId() {
         return id_cliente;
     }
 
