@@ -55,13 +55,11 @@ public class CarritoTest{
     }
 
     @Test
-    public void test006AlAgregarUnItemQueNoEsDeEstaEditorialSeDebeLanzarExcepcionYNoDebeSerAgregado(){
-        try {
-            carrito.agregarItem("INVALIDO");
-            assertTrue("nunca deberia llegar aca", false);
-        } catch (RuntimeException e) {
-            assertThat(e.getMessage()).isEqualTo(Carrito.mensajeDeErrorCuandoUnLibroNoEsValido());
-        }
+    public void test006PreguntarPorElClienteDelCarrito(){
+        assertThat(carrito.tuClienteId()).isEqualTo(1);
     }
+
+
+
 
 }

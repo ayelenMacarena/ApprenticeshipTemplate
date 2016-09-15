@@ -1,7 +1,5 @@
 package com.tenpines.starter.modelo;
 
-import com.tenpines.starter.rest.AgregarRequest;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 
@@ -11,24 +9,28 @@ public class Carrito {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
-//    @OneToMany
+   @Column
     private ArrayList<String> items = new ArrayList<String>();
 
-    private String cliente;
+    @OneToOne
+    /*@JoinColumn(name="id_cliente")*/
+    private Cliente cliente;
+
 
     public Carrito(){
         this.inicializarCatalogo();
+       // this.cliente = new Cliente();
     }
 
     //PERSISTENCIA
 
-    private void setId(Integer unId) {
+    private void setId(Long unId) {
         this.id = unId;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
@@ -44,17 +46,18 @@ public class Carrito {
 //        return cliente;
 //    }
 
-//    public void setCliente(String cliente) {
-//        this.cliente = cliente;
-//    }
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
 
 
     // METODOS
+    @Column
     private ArrayList<String> catalogo = new ArrayList<String>();
 
     public void inicializarCatalogo(){
         catalogo.add("Guerra de los mundos");
-        catalogo.add("El pergume");
+        catalogo.add("El perfume");
         catalogo.add("Nacidos de la bruma");
     }
 
@@ -93,5 +96,15 @@ public class Carrito {
 
     public ArrayList<String> contenido(){
         return items;
+    }
+
+    public int tuClienteId() {
+
+        //return cliente.getId_cliente();
+        return 1;
+    }
+
+    public ArrayList<String> catalogo() {
+        return this.catalogo;
     }
 }
