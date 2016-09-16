@@ -1,8 +1,10 @@
 package com.tenpines.starter.web;
 
 import com.tenpines.starter.modelo.Carrito;
+import com.tenpines.starter.modelo.Catalogo;
 import com.tenpines.starter.modelo.Cliente;
 import com.tenpines.starter.servicios.ServicioDeCarritos;
+import com.tenpines.starter.servicios.ServicioDeCatalogo;
 import com.tenpines.starter.servicios.ServicioDeCliente;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,13 +23,15 @@ public class CarritoController {
     private ServicioDeCarritos servicioCarrito;
 
     private ServicioDeCliente servicioDeCliente;
+    private ServicioDeCatalogo servicioCatalogo;
 
     Carrito carrito;
     Cliente unCliente;
 
     @Autowired
-    public CarritoController(ServicioDeCarritos servicioDeCarritos, ServicioDeCliente servicioDeClientes) {
+    public CarritoController(ServicioDeCarritos servicioDeCarritos, ServicioDeCliente servicioDeClientes, ServicioDeCatalogo servicioDeCatalogo) {
         this.servicioCarrito = servicioDeCarritos;
+        this.servicioCatalogo = servicioDeCatalogo;
 
         this.servicioDeCliente = servicioDeClientes;
 
@@ -52,7 +56,7 @@ public class CarritoController {
 
     @RequestMapping(value = Endpoints.AGREGAR_ITEM, method = RequestMethod.POST)
     void agregarUnLibro(@RequestParam(value = "libro") String unLibro, HttpServletResponse response) throws IOException {
-        carrito.agregarItem(unLibro);
+        carrito.agregarLibro(unLibro, 1);
         servicioCarrito.almacenar(carrito);
         response.sendRedirect(Endpoints.HOME);
     }
@@ -77,6 +81,6 @@ public class CarritoController {
     }
 
     private ArrayList<String> catalogo(){
-        return Carrito.catalogo();
+        return (new Catalogo()).getNombreLibro();
     }
 }
