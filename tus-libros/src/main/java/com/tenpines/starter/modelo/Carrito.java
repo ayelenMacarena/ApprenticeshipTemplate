@@ -11,7 +11,7 @@ public class Carrito {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-   @Column
+    @Column
     private ArrayList<String> items = new ArrayList<String>();
 
     @OneToOne
@@ -53,33 +53,42 @@ public class Carrito {
 
     // METODOS
     @Column
-    private static ArrayList<String> catalogo = new ArrayList<String>();
+    private static Catalogo catalogo = new Catalogo();
 
-    public static void inicializarCatalogo(){
-        catalogo.add("Guerra de los mundos");
-        catalogo.add("El perfume");
-        catalogo.add("Nacidos de la bruma");
-    }
 
 
     public Boolean estaVacio() {
         return items.size() == 0;
     }
 
-    public void agregarItem(String unItem) {
+    public void agregarLibro(String unItem, Integer cantidad) {
         this.verificarQueElItemSeaValido(unItem);
-        items.add(unItem);
+        this. verificarQueLaCantidadSeaValida(cantidad);
+        for (int i=0; i<cantidad; i++) {
+            items.add(unItem);
+        }
     }
 
     private void verificarQueElItemSeaValido(String unItem) {
-        if (!catalogo.contains(unItem)){
+        if (!catalogo.incluye(unItem)){
             throw new RuntimeException(mensajeDeErrorCuandoUnLibroNoEsValido());
+        }
+    }
+
+    private void verificarQueLaCantidadSeaValida(Integer cantidad) {
+        if (cantidad <= 0){
+            throw new RuntimeException(mensajeDeErrorCuandoAgregoLibrosUnaCantidadNegativa());
         }
     }
 
     public static String mensajeDeErrorCuandoUnLibroNoEsValido() {
         return "El libro no corresponde a esta editorial";
     }
+
+    public static String mensajeDeErrorCuandoAgregoLibrosUnaCantidadNegativa() {
+        return "La cantidad de libros a agregar debe ser mayor a 0";
+    }
+
 
     public Boolean contiene(String unItem) {
         return items.contains(unItem);
@@ -105,8 +114,7 @@ public class Carrito {
 
     }
 
-    public static ArrayList<String> catalogo() {
-        inicializarCatalogo();
+    public static Catalogo catalogo() {
         return catalogo;
     }
 }
