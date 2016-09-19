@@ -69,7 +69,8 @@ public class CarritoController {
 
 
     private Carrito obtenerUnCarrito(){
-       // return servicioCarrito.buscarElCarrito(carrito.getId()); TODO: Eventualmene lo voy a necesitar.
+        if (carrito != null ){
+        return servicioCarrito.buscarElCarrito(carrito.getId());}
         return carrito;
     }
 
