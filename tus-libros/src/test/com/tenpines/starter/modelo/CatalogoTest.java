@@ -4,7 +4,8 @@ package com.tenpines.starter.modelo;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
+
 
 public class CatalogoTest {
 
@@ -21,4 +22,6 @@ public class CatalogoTest {
         assertThat(catalogo.getIsbn()).isEqualTo("123456789");
         assertThat(catalogo.getPrecio()).isEqualTo(45);
     }
+
+
 }

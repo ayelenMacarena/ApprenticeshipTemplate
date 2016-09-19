@@ -45,7 +45,6 @@ public class CarritoController {
 
     @RequestMapping(value = Endpoints.AGREGAR_CARRITO, method = RequestMethod.POST)
     void crearUnCarrito(HttpServletResponse response) throws IOException {
-        //TODO: Assert que haya Cliente, si no hay cliente tirar excepcion y no dejar crear carrito.-
         carrito = servicioCarrito.nuevoCarrito(unCliente);
         response.sendRedirect(Endpoints.HOME);
 
@@ -64,11 +63,7 @@ public class CarritoController {
     private void loguearCliente( @RequestParam Map<String,String> requestParams , HttpServletResponse response) throws IOException {
         Long idUsuario = Long.valueOf(requestParams.get("nombre"));
         String password = requestParams.get("password");
-        unCliente = servicioDeCliente.buscarElCliente(idUsuario);
-        //TODO: Validar si el usuario y la contraseña es correcta. Si es incorrecta que avise, sino que lo muestre.
-//        if (unCliente.getPassword().equals(password)){
-//        carrito.setCliente(unCliente);}
-
+        unCliente = servicioDeCliente.clienteLogueado(idUsuario, password);
         response.sendRedirect(Endpoints.HOME);
     }
 

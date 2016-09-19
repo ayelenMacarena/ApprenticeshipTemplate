@@ -13,6 +13,9 @@ public class ServicioDeCarritos {
     @Autowired
     private RepositorioDeCarritos repo;
 
+    @Autowired
+    private ServicioDeCliente servicioDeCliente;
+
     @Transactional
     public void almacenar(Carrito carrito) {
         repo.save(carrito);
@@ -25,8 +28,16 @@ public class ServicioDeCarritos {
     public Iterable<Carrito> mostrarCarritos(){ return repo.findAll();}
 
     public Carrito nuevoCarrito(Cliente unCliente) {
-        Carrito carrito = Carrito.crearCarrito(unCliente);
+        if(unCliente == null){
+            throw new RuntimeException(mensajeDeErrorCuandoQuieroCrearUnCarritoConUsuarioInvalido());
+        }
+        Carrito carrito = Carrito.crearCarrito(servicioDeCliente.buscarElCliente(unCliente.getId()));
         almacenar(carrito);
         return carrito;
     }
+
+    public static String mensajeDeErrorCuandoQuieroCrearUnCarritoConUsuarioInvalido() {
+        return "Para crear un carrito debe estar logueado con un usuario valido";
+    }
+
 }

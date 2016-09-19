@@ -22,11 +22,6 @@ public class ServicioDeCatalogo {
         repo.save(catalogo);
     }
 
-//    @Transactional
-//    public void almacenar(Carrito carrito) {
-//        repo.save(carrito);
-//    }
-
 
     public List<Catalogo> mostrarCatalogo(){
         List<Catalogo> repositorio = repo.findAll();

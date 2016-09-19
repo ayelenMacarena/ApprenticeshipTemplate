@@ -7,11 +7,10 @@ import javax.persistence.*;
  */
 
 @Entity
-public class Cliente {
+public class Cliente{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    //@OneToOne(cascade= CascadeType.ALL)
     private Long id_cliente;
 
     @Column

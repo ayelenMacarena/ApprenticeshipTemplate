@@ -18,11 +18,6 @@ public class Cajero {
         return precioTotal;
     }
 
-//    Carrito unCarrito
-//                .stream()
-//                .mapToInt(Carrito::getAge)
-//                .sum();
-
     public static String mensajeDeErrorCuandoQuieroCobrarUnCarroVacio() {
         return "No se puede cobrar un carro que esta vacio";
     }

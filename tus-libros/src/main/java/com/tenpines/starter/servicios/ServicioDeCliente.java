@@ -1,5 +1,6 @@
 package com.tenpines.starter.servicios;
 
+import com.sun.xml.internal.ws.api.message.ExceptionHasMessage;
 import com.tenpines.starter.modelo.Cliente;
 import com.tenpines.starter.repositorios.RepositorioDeClientes;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,18 @@ public class ServicioDeCliente {
     public Cliente buscarElCliente(Long id) {return repo.findOne(id);}
 
 
+    public boolean loguearCliente(Long Id, String password) {
+        return ((buscarElCliente(Id).getPassword()).equals(password));
+    }
 
+    public Cliente clienteLogueado(Long id, String password){
+        if (loguearCliente(id, password)){
+            return buscarElCliente(id);
+        }
+        throw new RuntimeException(mensajeDeErrorCuandoUnUsuarioOUnaContraseniaEsInvalida());
+    }
 
-
+    public static String mensajeDeErrorCuandoUnUsuarioOUnaContraseniaEsInvalida() {
+        return "Su usuario o contrasenia es invalido";
+    }
 }
