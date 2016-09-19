@@ -3,7 +3,7 @@ package com.tenpines.starter.modelo;
 
 import com.tenpines.starter.modelo.Carrito;
 
-public class ProvedorDeObjetos {
+public class ProveedorDeObjetos {
 
     public Carrito carritoVacio(){
         return new Carrito();

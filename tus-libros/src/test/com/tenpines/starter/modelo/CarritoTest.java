@@ -9,14 +9,14 @@ import static org.junit.Assert.assertTrue;
 public class CarritoTest{
 
     private Carrito carrito;
-    private ProvedorDeObjetos provedor;
+    private ProveedorDeObjetos provedor;
     private Catalogo libroElPerfume;
     private Catalogo libroGuerraDeLosMundos;
     private Catalogo libroInvalido;
 
     @Before
     public void setUp() {
-        provedor = new ProvedorDeObjetos();
+        provedor = new ProveedorDeObjetos();
         carrito = provedor.carritoVacio();
         libroElPerfume = provedor.crearLibro();
         libroGuerraDeLosMundos = provedor.crearOtroLibro();
