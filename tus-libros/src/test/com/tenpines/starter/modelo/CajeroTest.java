@@ -1,4 +1,4 @@
-package com.tenpines;
+package com.tenpines.starter.modelo;
 
 
 import com.tenpines.starter.modelo.Cajero;
@@ -10,7 +10,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class CajeroTest {
 
-    private Carrito carrito = new Carrito();
+    private Cliente cliente = Cliente.crearCliente("1234");
+    private Carrito carrito = Carrito.crearCarrito(cliente);
     private Cajero cajero = new Cajero();
 
     @Test
@@ -21,6 +22,7 @@ public class CajeroTest {
             assertThat(excepcionNoCobrarCarrosVacios.getMessage()).isEqualTo(Cajero.mensajeDeErrorCuandoQuieroCobrarUnCarroVacio());
         }
     }
+
 
 
 

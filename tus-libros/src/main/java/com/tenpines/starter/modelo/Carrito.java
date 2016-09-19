@@ -12,7 +12,7 @@ public class Carrito {
     private Long id;
 
     @Column
-    private ArrayList<String> items = new ArrayList<String>();
+    private ArrayList<Catalogo> items = new ArrayList<Catalogo>();
 
     @OneToOne
     /*@JoinColumn(name="id_cliente")*/
@@ -20,10 +20,13 @@ public class Carrito {
 
 
     public Carrito(){
+     }
 
-       // this.cliente = new Cliente();
+    public static Carrito crearCarrito(Cliente unCliente){
+        Carrito carrito = new Carrito();
+        carrito.setCliente(unCliente);
+        return carrito;
     }
-
     //PERSISTENCIA
 
     private void setId(Long unId) {
@@ -34,11 +37,11 @@ public class Carrito {
         return id;
     }
 
-    public void setItems(ArrayList<String> unItem) {
+    public void setItems(ArrayList<Catalogo> unItem) {
         this.items = unItem;
     }
 
-    public ArrayList<String> getItems() {
+    public ArrayList<Catalogo> getItems() {
         return items;
     }
 
@@ -52,7 +55,7 @@ public class Carrito {
 
 
     // METODOS
-    @Column
+
     private static Catalogo catalogo = new Catalogo();
 
 
@@ -61,17 +64,10 @@ public class Carrito {
         return items.size() == 0;
     }
 
-    public void agregarLibro(String unItem, Integer cantidad) {
-        this.verificarQueElItemSeaValido(unItem);
+    public void agregarLibro(Catalogo unLibro, Integer cantidad) {
         this. verificarQueLaCantidadSeaValida(cantidad);
         for (int i=0; i<cantidad; i++) {
-            items.add(unItem);
-        }
-    }
-
-    private void verificarQueElItemSeaValido(String unItem) {
-        if (!catalogo.incluye(unItem)){
-            throw new RuntimeException(mensajeDeErrorCuandoUnLibroNoEsValido());
+            items.add(unLibro);
         }
     }
 
@@ -81,20 +77,17 @@ public class Carrito {
         }
     }
 
-    public static String mensajeDeErrorCuandoUnLibroNoEsValido() {
-        return "El libro no corresponde a esta editorial";
-    }
 
     public static String mensajeDeErrorCuandoAgregoLibrosUnaCantidadNegativa() {
         return "La cantidad de libros a agregar debe ser mayor a 0";
     }
 
 
-    public Boolean contiene(String unItem) {
+    public Boolean contiene(Catalogo unItem) {
         return items.contains(unItem);
     }
 
-    public Integer contidadDeUnItem(final String unItem) {
+    public Integer contidadDeUnItem(final Catalogo unItem) {
         return Math.toIntExact(
                 items.stream().filter((item) -> item.equals(unItem)).count());
     }
@@ -103,7 +96,7 @@ public class Carrito {
         return items.size();
     }
 
-    public ArrayList<String> contenido(){
+    public ArrayList<Catalogo> contenido(){
         return items;
     }
 

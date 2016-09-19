@@ -31,4 +31,10 @@ public class Cliente {
     public String getPassword() {return password;}
 
     public Cliente(){}
+
+    public static Cliente crearCliente(String password) {
+        Cliente cliente = new Cliente();
+        cliente.setPassword(password);
+        return cliente;
+    }
 }

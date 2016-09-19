@@ -6,8 +6,15 @@ import java.util.ArrayList;
 @Entity
 public class Catalogo {
 
+    public static Catalogo crearLibro(String nombreLibro, String isbn, Integer precio){
+        Catalogo catalogo = new Catalogo();
+        catalogo.setNombreLibro(nombreLibro);
+        catalogo.setIsbn(isbn);
+        catalogo.setPrecio(precio);
+        return catalogo;
+    }
+
     public Catalogo(){
-        this.inicializarCatalogo();
     }
 
     @Id
@@ -15,31 +22,35 @@ public class Catalogo {
     private Long id;
 
     @Column
-    public ArrayList<String> nombreLibro = new ArrayList<String>();
+    public String nombreLibro;
+
+    @Column
+    public String isbn;
+
+    @Column
+    public Integer precio;
+    //TODO: Cambiar a Float.
 
 
-    public void inicializarCatalogo(){
-        nombreLibro.add("Guerra de los mundos");
-        nombreLibro.add("El perfume");
-        nombreLibro.add("Nacidos de la bruma");
-    }
-
-    public ArrayList<String> getNombreLibro(){
+    public String getNombreLibro(){
         return nombreLibro;
     }
 
-    public void setNombreLibro(ArrayList<String> unCatalogo) {
-        this.nombreLibro = unCatalogo;
-    }
-
-    public Boolean incluye(String unLibro){
-        return nombreLibro.contains(unLibro);
+    public void setNombreLibro(String unLibro) {
+        this.nombreLibro = unLibro;
     }
 
     public Long getId(){ return this.id;}
 
     public void setId(Long id){ this.id = id;}
 
+    public String getIsbn(){ return this.isbn;}
+
+    public void setIsbn(String isbn){this.isbn = isbn;}
+
+    public Integer getPrecio(){ return this.precio;}
+
+    public void setPrecio(Integer precio){ this.precio = precio;}
 
 
 }

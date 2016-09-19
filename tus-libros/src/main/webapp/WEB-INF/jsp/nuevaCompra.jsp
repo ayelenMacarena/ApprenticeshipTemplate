@@ -21,7 +21,7 @@
             Seleccione libro a agregar: <select name="libro">
             <option disabled selected value> -- Seleccione un libro -- </option>
             <c:forEach items="${libros}" var="libro">
-                <option value="${libro}">${libro}</option>
+                <option value="${libro}">${libro.getNombreLibro()}</option>
             </c:forEach>
         </select>
             <br><br>

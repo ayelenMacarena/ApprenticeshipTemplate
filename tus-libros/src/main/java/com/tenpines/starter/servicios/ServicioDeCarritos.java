@@ -1,6 +1,7 @@
 package com.tenpines.starter.servicios;
 
 import com.tenpines.starter.modelo.Carrito;
+import com.tenpines.starter.modelo.Cliente;
 import com.tenpines.starter.repositorios.RepositorioDeCarritos;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,6 @@ public class ServicioDeCarritos {
     @Transactional
     public void almacenar(Carrito carrito) {
         repo.save(carrito);
-
     }
 
 
@@ -23,4 +23,10 @@ public class ServicioDeCarritos {
     public Carrito buscarElCarrito(Long id) {return repo.findOne(id);}
 
     public Iterable<Carrito> mostrarCarritos(){ return repo.findAll();}
+
+    public Carrito nuevoCarrito(Cliente unCliente) {
+        Carrito carrito = Carrito.crearCarrito(unCliente);
+        almacenar(carrito);
+        return carrito;
+    }
 }

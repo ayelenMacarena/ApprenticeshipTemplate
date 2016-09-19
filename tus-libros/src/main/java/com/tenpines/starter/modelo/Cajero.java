@@ -3,20 +3,17 @@ package com.tenpines.starter.modelo;
 public class Cajero {
 
 
-    public void cobrar(Carrito carrito) {
 
+    public Integer cobrar(Carrito unCarrito){
+        if (unCarrito.estaVacio()) {
+            throw new RuntimeException(mensajeDeErrorCuandoQuieroCobrarUnCarroVacio());
+        }
+        return precioTotalCompra(unCarrito);
     }
 
-//    public Integer cobrar(Carrito unCarrito){
-//        if (unCarrito.estaVacio()) {
-//            throw new RuntimeException(mensajeDeErrorCuandoQuieroCobrarUnCarroVacio());
-//        }
-//        return precioTotalCompra(unCarrito);
-//    }
-
-//    private Integer precioTotalCompra(Carrito unCarrito) {
-//
-//    }
+    private Integer precioTotalCompra(Carrito unCarrito) {
+        return 15;
+    }
 
 //    Carrito unCarrito
 //                .stream()
