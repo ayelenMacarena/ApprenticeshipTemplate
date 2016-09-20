@@ -1,11 +1,12 @@
 package com.tenpines.starter.servicios;
 
-import com.sun.xml.internal.ws.api.message.ExceptionHasMessage;
 import com.tenpines.starter.modelo.Cliente;
 import com.tenpines.starter.repositorios.RepositorioDeClientes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * Created by pino on 15/09/16.
@@ -23,6 +24,8 @@ public class ServicioDeCliente {
     }
 
     public Cliente buscarElCliente(Long id) {return repo.findOne(id);}
+
+    public List<Cliente> mostrarClientes(){return repo.findAll();}
 
 
     public boolean loguearCliente(Long Id, String password) {

@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class ServicioDeCarritos {
 
@@ -25,7 +27,7 @@ public class ServicioDeCarritos {
 
     public Carrito buscarElCarrito(Long id) {return repo.findOne(id);}
 
-    public Iterable<Carrito> mostrarCarritos(){ return repo.findAll();}
+    public List<Carrito> mostrarCarritos(){ return repo.findAll();}
 
     public Carrito nuevoCarrito(Cliente unCliente) {
         if(unCliente == null){
