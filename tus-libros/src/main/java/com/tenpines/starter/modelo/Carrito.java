@@ -2,6 +2,7 @@ package com.tenpines.starter.modelo;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Carrito {
@@ -11,8 +12,8 @@ public class Carrito {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
-    private ArrayList<Catalogo> items = new ArrayList<Catalogo>();
+    @OneToMany
+    private List<Catalogo> items = new ArrayList<Catalogo>();
 
     @OneToOne
     /*@JoinColumn(name="id_cliente")*/
@@ -41,7 +42,7 @@ public class Carrito {
         this.items = unItem;
     }
 
-    public ArrayList<Catalogo> getItems() {
+    public List<Catalogo> getItems() {
         return items;
     }
 
@@ -96,7 +97,7 @@ public class Carrito {
         return items.size();
     }
 
-    public ArrayList<Catalogo> contenido(){
+    public List<Catalogo> contenido(){
         return items;
     }
 

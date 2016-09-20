@@ -14,8 +14,7 @@ import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.hamcrest.Matchers.contains;
-import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -39,7 +38,7 @@ public class APITest extends RESTTestBase {
         this.mockClient.perform(get(Endpoints.OBTENER_CARRITO))
                 .andExpect(content().contentType(JSON_CONTENT_TYPE))
                 .andExpect(status().is(200))
-                .andExpect(jsonPath("$..carritos").value(notNullValue()));
+                .andExpect(jsonPath("$..id").value(notNullValue()));
 
     }
 
@@ -50,10 +49,11 @@ public class APITest extends RESTTestBase {
 
         Mockito.when(servicioDeCarritos.mostrarCarritos()).thenReturn(Arrays.asList(carrito1));
 
+
         this.mockClient.perform(get(Endpoints.OBTENER_CARRITO))
                 .andExpect(content().contentType(JSON_CONTENT_TYPE))
                 .andExpect(status().is(200))
-                .andExpect(jsonPath("$..carritos").value(contains(carrito1)));
+                .andExpect(jsonPath("$[0]['cliente']['password']").value((cliente1.getPassword())));
 
         Mockito.verify(servicioDeCarritos, Mockito.times(1)).mostrarCarritos();
         Mockito.verifyNoMoreInteractions(servicioDeCarritos);
@@ -72,11 +72,22 @@ public class APITest extends RESTTestBase {
         this.mockClient.perform(get(Endpoints.OBTENER_CLIENTE))
                 .andExpect(content().contentType(JSON_CONTENT_TYPE))
                 .andExpect(status().is(200))
-                .andExpect(jsonPath("$..clientes").value(notNullValue()));
+                .andExpect(jsonPath("$..cliente").value(notNullValue()));
+    }
+
+    @Test
+    public void agregarClienteYMeDevuelvaLaListaConLoMismo() throws Exception {
+        Cliente cliente1 = Cliente.crearCliente("1234");
+
+        Mockito.when(servicioDeCliente.mostrarClientes()).thenReturn((Arrays.asList(cliente1)));
+
+        this.mockClient.perform(get(Endpoints.OBTENER_CLIENTE))
+                .andExpect(content().contentType(JSON_CONTENT_TYPE))
+                .andExpect(status().is(200))
+                .andExpect(jsonPath("$[0]['password']").value((cliente1.getPassword())));
 
 
     }
-
 
 
 }

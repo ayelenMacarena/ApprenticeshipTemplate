@@ -14,6 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class CajeroTest {
 
     private Cliente cliente = Cliente.crearCliente("1234");
+
     private Carrito carrito = Carrito.crearCarrito(cliente);
     private Cajero cajero = new Cajero();
     private ProveedorDeObjetos proveedor;

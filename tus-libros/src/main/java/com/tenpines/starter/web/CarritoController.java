@@ -47,20 +47,19 @@ public class CarritoController {
         return "nuevaCompra";
     }
 
-    @RequestMapping(value = Endpoints.AGREGAR_CARRITO, method = RequestMethod.GET)
+    @RequestMapping(value = Endpoints.AGREGAR_CARRITO, method = RequestMethod.POST)
     void crearUnCarrito(HttpServletResponse response) throws IOException {
         carrito = servicioCarrito.nuevoCarrito(unCliente);
         response.sendRedirect(Endpoints.HOME);
 
     }
-//
-//    @RequestMapping(value = Endpoints.AGREGAR_ITEM, method = RequestMethod.POST)
-//    void agregarUnLibro(@RequestParam(value = "libro") String unLibro, HttpServletResponse response) throws IOException {
-////        servicioCatalogo.darLibro()
-////        carrito.agregarLibro(unLibro, 1);
-////        servicioCarrito.almacenar(carrito);
-//        response.sendRedirect(Endpoints.HOME);
-//    }
+
+    @RequestMapping(value = Endpoints.AGREGAR_ITEM, method = RequestMethod.POST)
+    void agregarUnLibro(@RequestParam(value = "libro") Catalogo unLibro, HttpServletResponse response) throws IOException {
+        carrito.agregarLibro(unLibro, 1);
+        servicioCarrito.almacenar(carrito);
+        response.sendRedirect(Endpoints.HOME);
+    }
 
 
     @RequestMapping(value = Endpoints.LOGUEAR_CLIENTE, method = RequestMethod.POST)
