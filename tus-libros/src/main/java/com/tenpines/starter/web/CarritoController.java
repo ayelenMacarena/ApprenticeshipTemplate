@@ -1,9 +1,8 @@
 package com.tenpines.starter.web;
 
-import com.sun.org.apache.regexp.internal.RE;
 import com.tenpines.starter.modelo.Carrito;
-import com.tenpines.starter.modelo.Catalogo;
 import com.tenpines.starter.modelo.Cliente;
+import com.tenpines.starter.modelo.Libro;
 import com.tenpines.starter.servicios.ServicioDeCarritos;
 import com.tenpines.starter.servicios.ServicioDeCatalogo;
 import com.tenpines.starter.servicios.ServicioDeCliente;
@@ -55,12 +54,19 @@ public class CarritoController {
     }
 
     @RequestMapping(value = Endpoints.AGREGAR_ITEM, method = RequestMethod.POST)
-    void agregarUnLibro(@RequestParam(value = "libro") Catalogo unLibro, HttpServletResponse response) throws IOException {
-        carrito.agregarLibro(unLibro, 1);
-        servicioCarrito.almacenar(carrito);
+    void agregarUnLibro(@RequestParam Map<String,String> requestParams, HttpServletResponse response) throws IOException {
+        Long idLibro = Long.valueOf(requestParams.get("libro"));
+        Integer cantidad = Integer.valueOf(requestParams.get("cantidad"));
+        servicioCarrito.agregarLibro(carrito,idLibro,cantidad);
         response.sendRedirect(Endpoints.HOME);
     }
 
+
+    @RequestMapping(value=Endpoints.MOSTRAR_ITEMS, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    List<Libro> obtenerLibro(@RequestParam(value = "carrito") Long carritoId){
+        return servicioCarrito.mostrarLibrosDeCarrito(carritoId);
+    }
 
     @RequestMapping(value = Endpoints.LOGUEAR_CLIENTE, method = RequestMethod.POST)
     private void loguearCliente( @RequestParam Map<String,String> requestParams , HttpServletResponse response) throws IOException {
@@ -88,7 +94,7 @@ public class CarritoController {
         return servicioCarrito.mostrarCarritos();
     }
 
-    private Iterable<Catalogo> catalogo(){
+    private Iterable<Libro> catalogo(){
         return servicioCatalogo.mostrarCatalogo();
     }
 }

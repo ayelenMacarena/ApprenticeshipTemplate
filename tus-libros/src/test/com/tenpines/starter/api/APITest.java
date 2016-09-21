@@ -3,6 +3,7 @@ package com.tenpines.starter.api;
 import com.tenpines.starter.integracion.RESTTestBase;
 import com.tenpines.starter.modelo.Carrito;
 import com.tenpines.starter.modelo.Cliente;
+import com.tenpines.starter.modelo.Libro;
 import com.tenpines.starter.servicios.ServicioDeCarritos;
 import com.tenpines.starter.servicios.ServicioDeCliente;
 import com.tenpines.starter.web.Endpoints;
@@ -10,9 +11,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
-import java.util.List;
 
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -59,6 +58,22 @@ public class APITest extends RESTTestBase {
         Mockito.verifyNoMoreInteractions(servicioDeCarritos);
     }
 
+    @Test
+    public void agregarUnItemAlCarritoYQueEsteEnElCarrito() throws Exception {
+        Cliente cliente1 = Cliente.crearCliente("1234");
+        Carrito carrito = Carrito.crearCarrito(cliente1);
+        Libro libro = Libro.crearLibro("Hola", "9873459234",20);
+
+        Mockito.when(servicioDeCarritos.mostrarLibrosDeCarrito((long) 1)).thenReturn(Arrays.asList(libro,libro));
+
+        this.mockClient.perform(get(Endpoints.MOSTRAR_ITEMS))
+                .andExpect(content().contentType(JSON_CONTENT_TYPE))
+                .andExpect(status().is(200))
+                .andExpect(jsonPath("$[0]['isbn']").value(libro.getIsbn()));
+
+
+    }
+
     @MockBean
     private ServicioDeCliente servicioDeCliente;
 
@@ -86,8 +101,24 @@ public class APITest extends RESTTestBase {
                 .andExpect(status().is(200))
                 .andExpect(jsonPath("$[0]['password']").value((cliente1.getPassword())));
 
+    }
+
+
+    @Test
+    public void agregoUnCliente() throws Exception {
+        Cliente cliente1 = Cliente.crearCliente("1234");
+
+        Mockito.when(servicioDeCliente.mostrarClientes()).thenReturn((Arrays.asList(cliente1)));
+
+        this.mockClient.perform(get(Endpoints.OBTENER_CLIENTE))
+                .andExpect(content().contentType(JSON_CONTENT_TYPE))
+                .andExpect(status().is(200))
+                .andExpect(jsonPath("$[0]['password']").value((cliente1.getPassword())));
+
 
     }
+
+
 
 
 }

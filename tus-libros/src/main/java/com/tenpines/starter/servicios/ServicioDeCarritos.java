@@ -1,8 +1,8 @@
 package com.tenpines.starter.servicios;
 
 import com.tenpines.starter.modelo.Carrito;
-import com.tenpines.starter.modelo.Catalogo;
 import com.tenpines.starter.modelo.Cliente;
+import com.tenpines.starter.modelo.Libro;
 import com.tenpines.starter.repositorios.RepositorioDeCarritos;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +18,10 @@ public class ServicioDeCarritos {
 
     @Autowired
     private ServicioDeCliente servicioDeCliente;
+
+
+    @Autowired
+    private ServicioDeCatalogo servicioDeCatalogo;
 
     @Transactional
     public void almacenar(Carrito carrito) {
@@ -39,12 +43,18 @@ public class ServicioDeCarritos {
         return carrito;
     }
 
-    public void agregarLibro(Carrito unCarrito, Catalogo unLibro, Integer cantidad){
-        unCarrito.agregarLibro(unLibro,cantidad);
+    public void agregarLibro(Carrito unCarrito, Long unLibro, Integer cantidad){
+        Libro miLibroAAgregar = servicioDeCatalogo.darLibro(unLibro);
+        unCarrito.agregarLibro(miLibroAAgregar,cantidad);
         almacenar(unCarrito);
     }
     public static String mensajeDeErrorCuandoQuieroCrearUnCarritoConUsuarioInvalido() {
         return "Para crear un carrito debe estar logueado con un usuario valido";
+    }
+
+    public List<Libro> mostrarLibrosDeCarrito(Long id) {
+        Carrito carrito = repo.findOne(id);
+        return carrito.contenido();
     }
 
 }

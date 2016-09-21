@@ -1,11 +1,12 @@
 package com.tenpines.starter.modelo;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Carrito {
+public class Carrito implements Serializable, Cloneable{
 
 
     @Id
@@ -13,10 +14,9 @@ public class Carrito {
     private Long id;
 
     @OneToMany
-    private List<Catalogo> items = new ArrayList<Catalogo>();
+    private List<Libro> items;
 
     @OneToOne
-    /*@JoinColumn(name="id_cliente")*/
     private Cliente cliente;
 
 
@@ -26,6 +26,7 @@ public class Carrito {
     public static Carrito crearCarrito(Cliente unCliente){
         Carrito carrito = new Carrito();
         carrito.setCliente(unCliente);
+        carrito.setItems(new ArrayList<Libro>());
         return carrito;
     }
     //PERSISTENCIA
@@ -38,11 +39,11 @@ public class Carrito {
         return id;
     }
 
-    public void setItems(ArrayList<Catalogo> unItem) {
+    public void setItems(List<Libro> unItem) {
         this.items = unItem;
     }
 
-    public List<Catalogo> getItems() {
+    public List<Libro> getItems() {
         return items;
     }
 
@@ -57,7 +58,7 @@ public class Carrito {
 
     // METODOS
 
-    private static Catalogo catalogo = new Catalogo();
+    private static Libro libro = new Libro();
 
 
 
@@ -65,7 +66,7 @@ public class Carrito {
         return items.size() == 0;
     }
 
-    public void agregarLibro(Catalogo unLibro, Integer cantidad) {
+    public void agregarLibro(Libro unLibro, Integer cantidad) {
         this. verificarQueLaCantidadSeaValida(cantidad);
         for (int i=0; i<cantidad; i++) {
             items.add(unLibro);
@@ -84,11 +85,11 @@ public class Carrito {
     }
 
 
-    public Boolean contiene(Catalogo unItem) {
+    public Boolean contiene(Libro unItem) {
         return items.contains(unItem);
     }
 
-    public Integer contidadDeUnItem(final Catalogo unItem) {
+    public Integer contidadDeUnItem(final Libro unItem) {
         return Math.toIntExact(
                 items.stream().filter((item) -> item.equals(unItem)).count());
     }
@@ -97,7 +98,7 @@ public class Carrito {
         return items.size();
     }
 
-    public List<Catalogo> contenido(){
+    public List<Libro> contenido(){
         return items;
     }
 
@@ -108,7 +109,7 @@ public class Carrito {
 
     }
 
-    public static Catalogo catalogo() {
-        return catalogo;
+    public static Libro catalogo() {
+        return libro;
     }
 }

@@ -10,9 +10,9 @@ public class CarritoTest{
 
     private Carrito carrito;
     private ProveedorDeObjetos provedor;
-    private Catalogo libroElPerfume;
-    private Catalogo libroGuerraDeLosMundos;
-    private Catalogo libroInvalido;
+    private Libro libroElPerfume;
+    private Libro libroGuerraDeLosMundos;
+    private Libro libroInvalido;
 
     @Before
     public void setUp() {
