@@ -28,8 +28,6 @@ public class ServicioDeCarritos {
         repo.save(carrito);
     }
 
-
-
     public Carrito buscarElCarrito(Long id) {return repo.findOne(id);}
 
     public List<Carrito> mostrarCarritos(){ return repo.findAll();}

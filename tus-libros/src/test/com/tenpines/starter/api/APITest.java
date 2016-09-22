@@ -40,7 +40,6 @@ public class APITest extends RESTTestBase {
                 .andExpect(content().contentType(JSON_CONTENT_TYPE))
                 .andExpect(status().is(200))
                 .andExpect(jsonPath("$..id").value(notNullValue()));
-
     }
 
 
@@ -56,8 +55,6 @@ public class APITest extends RESTTestBase {
                 .andExpect(content().contentType(JSON_CONTENT_TYPE))
                 .andExpect(status().is(200))
                 .andExpect(jsonPath("$[0]['isbn']").value(libro.getIsbn()));
-
-
     }
 
     @MockBean
@@ -86,7 +83,6 @@ public class APITest extends RESTTestBase {
                 .andExpect(content().contentType(JSON_CONTENT_TYPE))
                 .andExpect(status().is(200))
                 .andExpect(jsonPath("$[0]['password']").value((cliente1.getPassword())));
-
     }
 
 
@@ -100,8 +96,6 @@ public class APITest extends RESTTestBase {
                 .andExpect(content().contentType(JSON_CONTENT_TYPE))
                 .andExpect(status().is(200))
                 .andExpect(jsonPath("$[0]['password']").value((cliente1.getPassword())));
-
-
     }
 
 

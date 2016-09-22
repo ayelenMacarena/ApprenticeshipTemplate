@@ -1,12 +1,7 @@
 package com.tenpines.starter.modelo;
 
-
-import com.tenpines.starter.modelo.Cajero;
-import com.tenpines.starter.modelo.Carrito;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.beans.PropertyVetoException;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.assertj.core.api.Assertions.assertThat;

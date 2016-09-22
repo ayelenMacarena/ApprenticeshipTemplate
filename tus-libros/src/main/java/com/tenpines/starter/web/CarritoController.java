@@ -67,7 +67,6 @@ public class CarritoController {
     @ResponseBody
     List<Libro> obtenerLibro(@RequestParam(value = "carrito") Long carritoId){
         //todo_: ver como queryDSL
-
         return servicioDeSesion.mostrarLibrosDeCarrito(sesion.getId_sesion());
     }
 

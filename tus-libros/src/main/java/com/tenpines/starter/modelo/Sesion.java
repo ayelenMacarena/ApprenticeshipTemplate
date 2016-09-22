@@ -6,10 +6,6 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
-/**
- * Created by Aye on 22/09/16.
- */
-
 @Entity
 public class Sesion {
 

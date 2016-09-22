@@ -2,8 +2,6 @@ package com.tenpines.starter.modelo;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 public class Libro implements Serializable, Cloneable{
@@ -55,5 +53,18 @@ public class Libro implements Serializable, Cloneable{
 
     public void setPrecio(Integer precio){ this.precio = precio;}
 
+    @Override
+    public boolean equals(Object objeto){
+        if (objeto == null){
+            return false;
+        }
+        if (!(objeto instanceof Libro)){
+            return false;
+        }
+        if (!(((Libro) objeto).getNombreLibro() == this.getNombreLibro())){
+            return false;
+        }
+        return true;
+    }                   //TODO CHECKEAR ESTE EQUALS -- CORRESPONDE A *1
 }
 

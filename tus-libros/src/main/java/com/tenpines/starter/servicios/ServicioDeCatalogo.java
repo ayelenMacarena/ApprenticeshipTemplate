@@ -18,10 +18,15 @@ public class ServicioDeCatalogo {
         return repo.findOne(id);
     }
 
-    public void guardarCatalogo(Libro libro) {
-        repo.save(libro);
+    public Libro agregarLibroAlCatalogo(String nombreLibro, String isbn , Integer precio){
+        Libro libro = Libro.crearLibro(nombreLibro, isbn, precio);
+        guardarEnCatalogo(libro);
+        return libro;
     }
 
+    public void guardarEnCatalogo(Libro libro) {
+        repo.save(libro);
+    }
 
     public List<Libro> mostrarCatalogo(){
         List<Libro> repositorio = repo.findAll();

@@ -2,9 +2,6 @@ package com.tenpines.starter.modelo;
 
 import javax.persistence.*;
 
-/**
- * Created by pino on 15/09/16.
- */
 
 @Entity
 public class Cliente{
