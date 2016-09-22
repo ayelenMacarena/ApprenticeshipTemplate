@@ -15,7 +15,7 @@ public class CajeroTest {
 
     private Cliente cliente = Cliente.crearCliente("1234");
 
-    private Carrito carrito = Carrito.crearCarrito(cliente);
+    private Carrito carrito = Carrito.crearCarrito();
     private Cajero cajero = new Cajero();
     private ProveedorDeObjetos proveedor;
 

@@ -5,7 +5,7 @@ public class ProveedorDeObjetos {
 
     public Carrito carritoVacio(){
         Cliente cliente = Cliente.crearCliente("1234");
-        return Carrito.crearCarrito(cliente);
+        return Carrito.crearCarrito();
     }
 
     public Libro crearLibro(){

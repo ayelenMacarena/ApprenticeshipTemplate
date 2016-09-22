@@ -6,6 +6,7 @@ import com.tenpines.starter.modelo.Libro;
 import com.tenpines.starter.servicios.ServicioDeCarritos;
 import com.tenpines.starter.servicios.ServicioDeCatalogo;
 import com.tenpines.starter.servicios.ServicioDeCliente;
+import com.tenpines.starter.servicios.ServicioDeSesion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -22,20 +23,17 @@ import java.util.Map;
 
 @Controller
 public class CarritoController {
-    private ServicioDeCarritos servicioCarrito;
 
-    private ServicioDeCliente servicioDeCliente;
     private ServicioDeCatalogo servicioCatalogo;
+    private ServicioDeSesion servicioDeSesion;
 
     Carrito carrito;
     Cliente unCliente;
 
     @Autowired
-    public CarritoController(ServicioDeCarritos servicioDeCarritos, ServicioDeCliente servicioDeClientes, ServicioDeCatalogo servicioDeCatalogo) {
-        this.servicioCarrito = servicioDeCarritos;
+    public CarritoController(ServicioDeSesion servicioDeSesion, ServicioDeCatalogo servicioDeCatalogo) {
         this.servicioCatalogo = servicioDeCatalogo;
-        this.servicioDeCliente = servicioDeClientes;
-
+        this.servicioDeSesion = servicioDeSesion;
     }
 
     @RequestMapping(Endpoints.HOME)
@@ -48,7 +46,7 @@ public class CarritoController {
 
     @RequestMapping(value = Endpoints.AGREGAR_CARRITO, method = RequestMethod.POST)
     void crearUnCarrito(HttpServletResponse response) throws IOException {
-        carrito = servicioCarrito.nuevoCarrito(unCliente);
+        carrito = servicioDeSesion.crearCarrito(unCliente);
         response.sendRedirect(Endpoints.HOME);
 
     }
@@ -57,7 +55,7 @@ public class CarritoController {
     void agregarUnLibro(@RequestParam Map<String,String> requestParams, HttpServletResponse response) throws IOException {
         Long idLibro = Long.valueOf(requestParams.get("libro"));
         Integer cantidad = Integer.valueOf(requestParams.get("cantidad"));
-        servicioCarrito.agregarLibro(carrito,idLibro,cantidad);
+        servicioDeSesion.agregarLibro(carrito,idLibro,cantidad);
         response.sendRedirect(Endpoints.HOME);
     }
 
@@ -65,7 +63,7 @@ public class CarritoController {
     @RequestMapping(value=Endpoints.MOSTRAR_ITEMS, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     List<Libro> obtenerLibro(@RequestParam(value = "carrito") Long carritoId){
-        return servicioCarrito.mostrarLibrosDeCarrito(carritoId);
+        return servicioDeSesion.mostrarLibrosDeCarrito(carritoId);
     }
 
     @RequestMapping(value = Endpoints.LOGUEAR_CLIENTE, method = RequestMethod.POST)
@@ -91,7 +89,7 @@ public class CarritoController {
     @RequestMapping(value=Endpoints.OBTENER_CARRITO, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     List<Carrito> obtenerCarritos(){
-        return servicioCarrito.mostrarCarritos();
+        return servicioDeSesion.mostrarCarritos();
     }
 
     private Iterable<Libro> catalogo(){

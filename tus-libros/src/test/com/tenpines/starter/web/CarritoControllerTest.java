@@ -5,6 +5,7 @@ import com.tenpines.starter.modelo.Carrito;
 import com.tenpines.starter.modelo.Cliente;
 import com.tenpines.starter.servicios.ServicioDeCarritos;
 import com.tenpines.starter.servicios.ServicioDeCliente;
+import com.tenpines.starter.servicios.ServicioDeSesion;
 import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,9 @@ public class CarritoControllerTest extends SpringTestBase {
     @Autowired
     private ServicioDeCliente servicioDeCliente;
 
+    @Autowired
+    private ServicioDeSesion servicioDeSesion;
+
     @Test
     public void hayCarritoCreado(){
         assertThat(servicioDeCarritos.mostrarCarritos()).isNotEmpty();
@@ -31,10 +35,10 @@ public class CarritoControllerTest extends SpringTestBase {
     public void noCrearCarritoSinUsuario(){
         try {
             Cliente cliente = null;
-            Carrito carrito = servicioDeCarritos.nuevoCarrito(cliente);
+            Carrito carrito = servicioDeSesion.crearCarrito(cliente);
             assertTrue("nunca deberia llegar aca", false);
         } catch (RuntimeException excepcionDeCarritoSinUsuario) {
-            AssertionsForClassTypes.assertThat(excepcionDeCarritoSinUsuario.getMessage()).isEqualTo(ServicioDeCarritos.mensajeDeErrorCuandoQuieroCrearUnCarritoConUsuarioInvalido());
+            AssertionsForClassTypes.assertThat(excepcionDeCarritoSinUsuario.getMessage()).isEqualTo(ServicioDeSesion.mensajeDeErrorCuandoQuieroCrearUnCarritoConUsuarioInvalido());
         }
     }
 

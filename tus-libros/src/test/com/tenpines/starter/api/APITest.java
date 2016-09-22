@@ -6,6 +6,7 @@ import com.tenpines.starter.modelo.Cliente;
 import com.tenpines.starter.modelo.Libro;
 import com.tenpines.starter.servicios.ServicioDeCarritos;
 import com.tenpines.starter.servicios.ServicioDeCliente;
+import com.tenpines.starter.servicios.ServicioDeSesion;
 import com.tenpines.starter.web.Endpoints;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -25,10 +26,13 @@ public class APITest extends RESTTestBase {
     @MockBean
     private ServicioDeCarritos servicioDeCarritos;
 
+    @MockBean
+    private ServicioDeSesion servicioDeSesion;
+
     @Test
     public void agregarCarritoYQueNoSeaNullElContenidoDeLaTabla() throws Exception {
         Cliente cliente1 = Cliente.crearCliente("1234");
-        Carrito carrito1 = Carrito.crearCarrito(cliente1);
+        Carrito carrito1 = Carrito.crearCarrito();
 
         Mockito.when(servicioDeCarritos.mostrarCarritos()).thenReturn(Arrays.asList(carrito1));
 
@@ -39,27 +43,11 @@ public class APITest extends RESTTestBase {
 
     }
 
-    @Test
-        public void agregar1CarritoYQueDevuelvaElJson() throws Exception {
-        Cliente cliente1 = Cliente.crearCliente("1234");
-        Carrito carrito1 = Carrito.crearCarrito(cliente1);
-
-        Mockito.when(servicioDeCarritos.mostrarCarritos()).thenReturn(Arrays.asList(carrito1));
-
-
-        this.mockClient.perform(get(Endpoints.OBTENER_CARRITO))
-                .andExpect(content().contentType(JSON_CONTENT_TYPE))
-                .andExpect(status().is(200))
-                .andExpect(jsonPath("$[0]['cliente']['password']").value((cliente1.getPassword())));
-
-        Mockito.verify(servicioDeCarritos, Mockito.times(1)).mostrarCarritos();
-        Mockito.verifyNoMoreInteractions(servicioDeCarritos);
-    }
 
     @Test
     public void agregarUnItemAlCarritoYQueEsteEnElCarrito() throws Exception {
         Cliente cliente1 = Cliente.crearCliente("1234");
-        Carrito carrito = Carrito.crearCarrito(cliente1);
+        Carrito carrito = Carrito.crearCarrito();
         Libro libro = Libro.crearLibro("Hola", "9873459234",20);
 
         Mockito.when(servicioDeCarritos.mostrarLibrosDeCarrito((long) 1)).thenReturn(Arrays.asList(libro,libro));

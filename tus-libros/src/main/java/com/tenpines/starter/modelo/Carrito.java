@@ -16,16 +16,12 @@ public class Carrito implements Serializable, Cloneable{
     @OneToMany
     private List<Libro> items;
 
-    @OneToOne
-    private Cliente cliente;
-
 
     public Carrito(){
      }
 
-    public static Carrito crearCarrito(Cliente unCliente){
+    public static Carrito crearCarrito(){
         Carrito carrito = new Carrito();
-        carrito.setCliente(unCliente);
         carrito.setItems(new ArrayList<Libro>());
         return carrito;
     }
@@ -47,18 +43,9 @@ public class Carrito implements Serializable, Cloneable{
         return items;
     }
 
-    public Cliente getCliente() {
-        return cliente;
-    }
-
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
-    }
 
 
     // METODOS
-
-    private static Libro libro = new Libro();
 
 
 
@@ -102,14 +89,5 @@ public class Carrito implements Serializable, Cloneable{
         return items;
     }
 
-    public Long tuClienteId() {
 
-        return cliente.getId();
-
-
-    }
-
-    public static Libro catalogo() {
-        return libro;
-    }
 }
