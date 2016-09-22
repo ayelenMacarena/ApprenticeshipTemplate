@@ -3,7 +3,7 @@ package com.tenpines.starter.web;
 import com.tenpines.starter.modelo.Carrito;
 import com.tenpines.starter.modelo.Cliente;
 import com.tenpines.starter.modelo.Libro;
-import com.tenpines.starter.servicios.ServicioDeCarritos;
+import com.tenpines.starter.modelo.Sesion;
 import com.tenpines.starter.servicios.ServicioDeCatalogo;
 import com.tenpines.starter.servicios.ServicioDeCliente;
 import com.tenpines.starter.servicios.ServicioDeSesion;
@@ -26,9 +26,12 @@ public class CarritoController {
 
     private ServicioDeCatalogo servicioCatalogo;
     private ServicioDeSesion servicioDeSesion;
+    @Autowired
+    private ServicioDeCliente servicioDeCliente;
 
-    Carrito carrito;
-    Cliente unCliente;
+
+    private Sesion sesion;
+    private Cliente unCliente;
 
     @Autowired
     public CarritoController(ServicioDeSesion servicioDeSesion, ServicioDeCatalogo servicioDeCatalogo) {
@@ -38,7 +41,7 @@ public class CarritoController {
 
     @RequestMapping(Endpoints.HOME)
     String home(Model model) {
-        model.addAttribute("carrito", obtenerUnCarrito());
+        //model.addAttribute("carrito", obtenerUnCarrito());
         model.addAttribute("cliente", unCliente);
         model.addAttribute("libros", catalogo());
         return "nuevaCompra";
@@ -46,7 +49,7 @@ public class CarritoController {
 
     @RequestMapping(value = Endpoints.AGREGAR_CARRITO, method = RequestMethod.POST)
     void crearUnCarrito(HttpServletResponse response) throws IOException {
-        carrito = servicioDeSesion.crearCarrito(unCliente);
+        sesion = servicioDeSesion.crearCarrito(unCliente);
         response.sendRedirect(Endpoints.HOME);
 
     }
@@ -55,7 +58,7 @@ public class CarritoController {
     void agregarUnLibro(@RequestParam Map<String,String> requestParams, HttpServletResponse response) throws IOException {
         Long idLibro = Long.valueOf(requestParams.get("libro"));
         Integer cantidad = Integer.valueOf(requestParams.get("cantidad"));
-        servicioDeSesion.agregarLibro(carrito,idLibro,cantidad);
+        servicioDeSesion.agregarLibro(sesion,idLibro,cantidad);
         response.sendRedirect(Endpoints.HOME);
     }
 
@@ -63,7 +66,9 @@ public class CarritoController {
     @RequestMapping(value=Endpoints.MOSTRAR_ITEMS, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     List<Libro> obtenerLibro(@RequestParam(value = "carrito") Long carritoId){
-        return servicioDeSesion.mostrarLibrosDeCarrito(carritoId);
+        //todo_: ver como queryDSL
+
+        return servicioDeSesion.mostrarLibrosDeCarrito(sesion.getId_sesion());
     }
 
     @RequestMapping(value = Endpoints.LOGUEAR_CLIENTE, method = RequestMethod.POST)
@@ -81,15 +86,13 @@ public class CarritoController {
     }
 
     private Carrito obtenerUnCarrito(){
-        if (carrito != null ){
-        return servicioCarrito.buscarElCarrito(carrito.getId());}
-        return carrito;
+        return sesion.getCarrito();
     }
 
     @RequestMapping(value=Endpoints.OBTENER_CARRITO, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    List<Carrito> obtenerCarritos(){
-        return servicioDeSesion.mostrarCarritos();
+    void obtenerCarritos(){
+        //return servicioDeSesion.mostrarCarritos();
     }
 
     private Iterable<Libro> catalogo(){

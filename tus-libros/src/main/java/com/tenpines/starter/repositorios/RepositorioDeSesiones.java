@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * Created by Aye on 22/09/16.
  */
+
 @Transactional
 public interface RepositorioDeSesiones extends JpaRepository<Sesion, Long> {
 

@@ -29,14 +29,14 @@ public class ServicioDeSesion {
     private RepositorioDeSesiones repositorio;
 
 
-    public Carrito crearCarrito(Cliente unCliente) {
+    public Sesion crearCarrito(Cliente unCliente) {
         if(unCliente == null){
             throw new RuntimeException(mensajeDeErrorCuandoQuieroCrearUnCarritoConUsuarioInvalido());
         }
         Carrito carrito = servicioDeCarritos.nuevoCarrito();
         Sesion nuevaSesion = Sesion.crearSesion(carrito,unCliente);
         repositorio.save(nuevaSesion);
-        return carrito;
+        return nuevaSesion;
     }
 
 
@@ -48,15 +48,15 @@ public class ServicioDeSesion {
         return servicioDeCarritos.mostrarCarritos();
     }
 
-    public List<Libro> mostrarLibrosDeCarrito(Long carritoId) {
-        Sesion laSesion = buscarSesionParaElCarrito(carritoId);
+    public List<Libro> mostrarLibrosDeCarrito(Long sesionId) {
+        Sesion laSesion = buscarSesionParaElCarrito(sesionId);
         if (laSesion == null){
             throw new RuntimeException(mensajeDeErrorCuandoNoExisteElCarritoQueQuiero());
         }
         chequearSesionExpirada(laSesion);
 
         actualizarUltimoUsoDeSesion(laSesion);
-        return servicioDeCarritos.mostrarLibrosDeCarrito(carritoId);
+        return servicioDeCarritos.mostrarLibrosDeCarrito(laSesion.getCarrito().getId());
     }
 
     private boolean laSesionExpiro(Sesion laSesion) {
@@ -78,18 +78,15 @@ public class ServicioDeSesion {
         return "No existe el carrito del que quiere ver el contenido";
     }
 
-    private Sesion buscarSesionParaElCarrito(Long carritoId) {
-        //TODO: ROMPE ACA; NO PUEDE CASTEAR STREAM A SESION
-        Sesion sesion = (Sesion) repositorio.findAll().stream().filter(s -> s.getCarrito().getId() == carritoId);
+    private Sesion buscarSesionParaElCarrito(Long sesionId) {
+        Sesion sesion = repositorio.findOne(sesionId);
         return sesion;
     }
 
-    public void agregarLibro(Carrito carrito, Long idLibro, Integer cantidad) {
-
-        Sesion laSesion = buscarSesionParaElCarrito(carrito.getId());
-        chequearSesionExpirada(laSesion);
-        actualizarUltimoUsoDeSesion(laSesion);
-        servicioDeCarritos.agregarLibro(carrito,idLibro,cantidad);
+    public void agregarLibro(Sesion sesion, Long idLibro, Integer cantidad) {
+        chequearSesionExpirada(sesion);
+        actualizarUltimoUsoDeSesion(sesion);
+        servicioDeCarritos.agregarLibro(sesion.getCarrito(),idLibro,cantidad);
     }
 
     private void chequearSesionExpirada(Sesion laSesion) {
@@ -97,4 +94,5 @@ public class ServicioDeSesion {
             throw new RuntimeException(mensajeDeErrorSesionExpirada());
         }
     }
+
 }

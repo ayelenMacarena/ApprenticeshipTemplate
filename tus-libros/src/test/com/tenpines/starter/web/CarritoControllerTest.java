@@ -3,6 +3,7 @@ package com.tenpines.starter.web;
 import com.tenpines.starter.integracion.SpringTestBase;
 import com.tenpines.starter.modelo.Carrito;
 import com.tenpines.starter.modelo.Cliente;
+import com.tenpines.starter.modelo.Sesion;
 import com.tenpines.starter.servicios.ServicioDeCarritos;
 import com.tenpines.starter.servicios.ServicioDeCliente;
 import com.tenpines.starter.servicios.ServicioDeSesion;
@@ -35,7 +36,7 @@ public class CarritoControllerTest extends SpringTestBase {
     public void noCrearCarritoSinUsuario(){
         try {
             Cliente cliente = null;
-            Carrito carrito = servicioDeSesion.crearCarrito(cliente);
+            Sesion sesion = servicioDeSesion.crearCarrito(cliente);
             assertTrue("nunca deberia llegar aca", false);
         } catch (RuntimeException excepcionDeCarritoSinUsuario) {
             AssertionsForClassTypes.assertThat(excepcionDeCarritoSinUsuario.getMessage()).isEqualTo(ServicioDeSesion.mensajeDeErrorCuandoQuieroCrearUnCarritoConUsuarioInvalido());
