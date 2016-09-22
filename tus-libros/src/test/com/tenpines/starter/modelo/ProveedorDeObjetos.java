@@ -4,7 +4,8 @@ package com.tenpines.starter.modelo;
 public class ProveedorDeObjetos {
 
     public Carrito carritoVacio(){
-        return new Carrito();
+        Cliente cliente = Cliente.crearCliente("1234");
+        return Carrito.crearCarrito(cliente);
     }
 
     public Libro crearLibro(){
