@@ -46,8 +46,9 @@
                 ---------------------------------------------------------
                 <li class="clt">Cliente:${cliente.getId()}</li>
                 <br/>
-                <li class="crt">Carrito id_catalogo:${carrito.getId()}</li>
+                <li class="crt">Carrito id:${carrito.getId()}</li>
                 <br/>
+                <li class="crt">ContenidoActual id:${carrito}</li>
                 <br/>
                 ---------------------------------------------------------
         </ul>

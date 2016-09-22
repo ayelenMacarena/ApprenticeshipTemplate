@@ -5,7 +5,8 @@ import java.time.LocalDate;
 
 public class TarjetaDeCredito {
 
-    private static Reloj reloj = new Reloj();;
+    private static Reloj reloj = new Reloj();
+
     public Long numero;
     public LocalDate fechaDeExpiracion;
     public String nombreDuenio;

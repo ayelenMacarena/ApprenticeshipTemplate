@@ -14,9 +14,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 
-/**
- * Created by Aye on 22/09/16.
- */
+
 @Service
 @Transactional
 public class ServicioDeSesion {
@@ -66,17 +64,13 @@ public class ServicioDeSesion {
         return periodoDeTiempo > 30;
     }
 
-
     private void actualizarUltimoUsoDeSesion(Sesion sesion) {
         sesion.setUltimoUso(Timestamp.valueOf(LocalDateTime.now()));
         repositorio.save(sesion);
     }
 
-    private String mensajeDeErrorSesionExpirada() {
-        return "Su sesión está expirada";
-    }
 
-    private String mensajeDeErrorCuandoNoExisteElCarritoQueQuiero() {
+    public static String mensajeDeErrorCuandoNoExisteElCarritoQueQuiero() {
         return "No existe el carrito del que quiere ver el contenido";
     }
 
@@ -97,4 +91,7 @@ public class ServicioDeSesion {
         }
     }
 
+    public static String mensajeDeErrorSesionExpirada() {
+        return "Su sesión está expirada";
+    }
 }

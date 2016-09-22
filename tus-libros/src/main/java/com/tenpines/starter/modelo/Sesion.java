@@ -23,6 +23,13 @@ public class Sesion {
     @Type(type="timestamp")
     private Timestamp ultimoUso;
 
+    public static Sesion crearSesion(Carrito carrito, Cliente unCliente) {
+        Sesion sesion = new Sesion();
+        sesion.setCliente(unCliente);
+        sesion.setCarrito(carrito);
+        sesion.setUltimoUso(Timestamp.valueOf(LocalDateTime.now()));
+        return sesion;
+    }
 
     public Long getId_sesion() {
         return id_sesion;
@@ -57,11 +64,4 @@ public class Sesion {
         return ultimoUso;
     }
 
-    public static Sesion crearSesion(Carrito carrito, Cliente unCliente) {
-        Sesion sesion = new Sesion();
-        sesion.setCliente(unCliente);
-        sesion.setCarrito(carrito);
-        sesion.setUltimoUso(Timestamp.valueOf(LocalDateTime.now()));
-        return sesion;
-    }
 }
