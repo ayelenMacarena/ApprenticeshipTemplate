@@ -66,8 +66,7 @@ public class CarritoController {
     @RequestMapping(value=Endpoints.MOSTRAR_ITEMS, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     List<Libro> obtenerLibro(@RequestParam(value = "carrito") Long carritoId){
-        //todo_: ver como queryDSL
-        return servicioDeSesion.mostrarLibrosDeCarrito(sesion.getId_sesion());
+        return servicioDeSesion.mostrarLibrosDeCarrito(carritoId);
     }
 
     @RequestMapping(value = Endpoints.LOGUEAR_CLIENTE, method = RequestMethod.POST)

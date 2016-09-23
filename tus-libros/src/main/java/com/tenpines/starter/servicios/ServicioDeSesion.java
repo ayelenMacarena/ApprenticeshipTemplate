@@ -1,18 +1,17 @@
 package com.tenpines.starter.servicios;
 
-import com.tenpines.starter.modelo.Carrito;
-import com.tenpines.starter.modelo.Cliente;
-import com.tenpines.starter.modelo.Libro;
-import com.tenpines.starter.modelo.Sesion;
+import com.tenpines.starter.modelo.*;
 import com.tenpines.starter.repositorios.RepositorioDeSesiones;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.sql.Timestamp;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
+
 
 
 @Service
@@ -27,6 +26,10 @@ public class ServicioDeSesion {
 
     @Autowired
     private RepositorioDeSesiones repositorio;
+
+    @Autowired
+    private EntityManager em;
+
 
 
     public Sesion crearCarrito(Cliente unCliente) {
@@ -48,8 +51,8 @@ public class ServicioDeSesion {
         return servicioDeCarritos.mostrarCarritos();
     }
 
-    public List<Libro> mostrarLibrosDeCarrito(Long sesionId) {
-        Sesion laSesion = buscarSesionParaElCarrito(sesionId);
+    public List<Libro> mostrarLibrosDeCarrito(Long carritoId) {
+        Sesion laSesion = buscarSesionParaElCarrito(carritoId);
         if (laSesion == null){
             throw new RuntimeException(mensajeDeErrorCuandoNoExisteElCarritoQueQuiero());
         }
@@ -74,13 +77,19 @@ public class ServicioDeSesion {
         return "No existe el carrito del que quiere ver el contenido";
     }
 
-    private Sesion buscarSesionParaElCarrito(Long sesionId) {
-        Sesion sesion = repositorio.findOne(sesionId);
-        return sesion;
+    private Sesion buscarSesionParaElCarrito(Long carritoId) {
+        try {
+        Sesion sesion = em.createQuery("select c from Sesion c where c.carrito.id = :id", Sesion.class).
+                setParameter("id", carritoId).getSingleResult();
+        return sesion;}
+        catch (RuntimeException NoExisteElCarrito) {
+                throw new RuntimeException(mensajeDeErrorCuandoNoExisteElCarritoQueQuiero());
+             }
     }
 
     public void agregarLibro(Sesion sesion, Long idLibro, Integer cantidad) {
         chequearSesionExpirada(sesion);
+
         actualizarUltimoUsoDeSesion(sesion);
         servicioDeCarritos.agregarLibro(sesion.getCarrito(),idLibro,cantidad);
     }
