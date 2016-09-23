@@ -46,7 +46,7 @@ public class ServicioDeCarritos {
 
     public List<Libro> mostrarLibrosDeCarrito(Long id) {
         Carrito carrito = repo.findOne(id);
-        return carrito.contenido();
+        return carrito.getItems();
     }
 
 }

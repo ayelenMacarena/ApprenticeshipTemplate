@@ -83,7 +83,6 @@ public class TestIntegracion extends SpringTestBase {
         } catch (RuntimeException excepcionDeSesionExpirada) {
             assertThat(excepcionDeSesionExpirada.getMessage()).isEqualTo(ServicioDeSesion.mensajeDeErrorSesionExpirada());
         }
-        // TODO: FALTARIA ACERTAR QUE REALMENTE NO SE HAYA AGREGADO EL OBJETO, ADEMAS DE LANZAR LA EXCEPCION.
     }
 
 //    @Test
