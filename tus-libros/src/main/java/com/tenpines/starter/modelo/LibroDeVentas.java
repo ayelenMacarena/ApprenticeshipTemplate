@@ -4,6 +4,7 @@ package com.tenpines.starter.modelo;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class LibroDeVentas {
 
     public List<VentaConcretada> getVentasConcretadas() {

@@ -2,6 +2,7 @@ package com.tenpines.starter.modelo;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Objects;
 
 @Entity
 public class Libro implements Serializable, Cloneable{
@@ -63,11 +64,13 @@ public class Libro implements Serializable, Cloneable{
         }
         Libro libro = (Libro) objeto;
 
-        if (!(libro.getNombreLibro() == this.getNombreLibro())){
+        if (!(Objects.equals(libro.getNombreLibro(), this.getNombreLibro()))){
             return false;
         }
-        if
+        if (!(Objects.equals(libro.getIsbn(), this.getIsbn()))){
+            return false;
+        }
         return true;
-    }                   //TODO CHECKEAR ESTE EQUALS -- CORRESPONDE A *1
+    }
 }
 

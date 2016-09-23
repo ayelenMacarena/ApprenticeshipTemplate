@@ -25,7 +25,6 @@ public class VentaConcretada implements Serializable, Cloneable{
     public LocalDateTime fechaYHoraDeVenta;
 
 
-
     public Long getId() {
         return id;
     }

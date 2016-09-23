@@ -93,6 +93,12 @@ public class CarritoController {
         //return servicioDeSesion.mostrarCarritos();
     }
 
+    @RequestMapping(value = Endpoints.COBRAR_CARRITO, method = RequestMethod.POST)
+    void checkoutearCarrito(@RequestParam(value = "carrito") Long carritoId, HttpServletResponse response) throws IOException {
+        servicioDeSesion.cobrarCarrito(sesion, carritoId);
+        response.sendRedirect(Endpoints.HOME); // TODO TERMINAR CHECKOUT CARRITO
+    }
+
     private Iterable<Libro> catalogo(){
         return servicioCatalogo.mostrarCatalogo();
     }

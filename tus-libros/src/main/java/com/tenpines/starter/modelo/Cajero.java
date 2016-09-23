@@ -4,14 +4,11 @@ import java.time.LocalDateTime;
 
 public class Cajero {
 
-    private MerchantProcessor merchantProcessor = new MerchantProcessor();
-    private LibroDeVentas libroDeVentas = new LibroDeVentas();
 
-    public Boolean cobrar(Carrito unCarrito, TarjetaDeCredito tarjetaDeCreaditoValida){
+    public VentaConcretada cobrar(Carrito unCarrito, TarjetaDeCredito tarjetaDeCreaditoValida){
         validarSiUnCarritoEstaVacio(unCarrito);
         VentaConcretada venta = VentaConcretada.nuevaVentaConcretada(unCarrito.getItems(), precioTotalCompra(unCarrito), LocalDateTime.now());
-        libroDeVentas.registrarVenta(venta);
-        return merchantProcessor.efectuarCompra(tarjetaDeCreaditoValida, precioTotalCompra(unCarrito));
+        return venta;
     }
 
     private void validarSiUnCarritoEstaVacio(Carrito unCarrito) {

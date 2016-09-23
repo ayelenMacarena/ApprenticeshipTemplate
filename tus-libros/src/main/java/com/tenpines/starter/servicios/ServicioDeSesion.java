@@ -103,4 +103,7 @@ public class ServicioDeSesion {
     public static String mensajeDeErrorSesionExpirada() {
         return "Su sesión está expirada";
     }
+
+    public void cobrarCarrito(Sesion sesion, Long carritoId) {
+    }     //TODO : KEVIN TERMINAR (RECORDATORIO)
 }
