@@ -64,7 +64,8 @@ public class TestIntegracion extends SpringTestBase {
 
         servicioDeSesion.agregarLibro(sesion, libro.getId(), 1);
 
-        assertThat((servicioDeSesion.mostrarLibrosDeCarrito(sesion.getId_sesion())).stream().filter(li -> li.equals(libro))).contains(libro);
+//        assertThat((servicioDeSesion.mostrarLibrosDeCarrito(sesion.getId_sesion())).stream().filter(li -> li.equals(libro))).contains(libro);
+        assertThat((servicioDeSesion.mostrarLibrosDeCarrito(sesion.getId_sesion())).contains(libro));
     }                //TODO CHECKEAR ESTE EQUALS -- CORRESPONDE A *1
 
     @Test

@@ -61,9 +61,12 @@ public class Libro implements Serializable, Cloneable{
         if (!(objeto instanceof Libro)){
             return false;
         }
-        if (!(((Libro) objeto).getNombreLibro() == this.getNombreLibro())){
+        Libro libro = (Libro) objeto;
+
+        if (!(libro.getNombreLibro() == this.getNombreLibro())){
             return false;
         }
+        if
         return true;
     }                   //TODO CHECKEAR ESTE EQUALS -- CORRESPONDE A *1
 }
