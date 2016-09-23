@@ -19,7 +19,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 
-public class TestTransversal extends SpringTestBase {
+public class TestIntegracion extends SpringTestBase {
 
     @Autowired
     private ServicioDeCarritos servicioDeCarritos;
