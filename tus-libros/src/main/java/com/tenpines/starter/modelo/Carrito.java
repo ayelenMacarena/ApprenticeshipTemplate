@@ -8,7 +8,6 @@ import java.util.List;
 @Entity
 public class Carrito implements Serializable, Cloneable{
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -17,7 +16,7 @@ public class Carrito implements Serializable, Cloneable{
     private List<Libro> items;
 
     public Carrito(){
-     }
+    }
 
     public static Carrito crearCarrito(){
         Carrito carrito = new Carrito();
@@ -65,7 +64,6 @@ public class Carrito implements Serializable, Cloneable{
         }
     }
 
-
     public static String mensajeDeErrorCuandoAgregoLibrosUnaCantidadNegativa() {
         return "La cantidad de libros a agregar debe ser mayor a 0";
     }
@@ -82,10 +80,6 @@ public class Carrito implements Serializable, Cloneable{
 
     public Integer cantidadTotalDeItems() {
         return items.size();
-    }
-
-    public List<Libro> contenido(){
-        return items;
     }
 
 

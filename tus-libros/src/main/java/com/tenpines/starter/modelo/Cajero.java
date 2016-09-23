@@ -1,20 +1,28 @@
 package com.tenpines.starter.modelo;
 
+import java.time.LocalDateTime;
+
 public class Cajero {
 
+    private MerchantProcessor merchantProcessor = new MerchantProcessor();
+    private LibroDeVentas libroDeVentas = new LibroDeVentas();
 
+    public Boolean cobrar(Carrito unCarrito, TarjetaDeCredito tarjetaDeCreaditoValida){
+        validarSiUnCarritoEstaVacio(unCarrito);
+        VentaConcretada venta = VentaConcretada.nuevaVentaConcretada(unCarrito.getItems(), precioTotalCompra(unCarrito), LocalDateTime.now());
+        libroDeVentas.registrarVenta(venta);
+        return merchantProcessor.efectuarCompra(tarjetaDeCreaditoValida, precioTotalCompra(unCarrito));
+    }
 
-    public Integer cobrar(Carrito unCarrito){
+    private void validarSiUnCarritoEstaVacio(Carrito unCarrito) {
         if (unCarrito.estaVacio()) {
             throw new RuntimeException(mensajeDeErrorCuandoQuieroCobrarUnCarroVacio());
         }
-        return precioTotalCompra(unCarrito);
     }
 
     private Integer precioTotalCompra(Carrito unCarrito) {
 
-        int precioTotal = unCarrito.getItems().stream().mapToInt(Libro::getPrecio).sum();
-
+        Integer precioTotal = unCarrito.getItems().stream().mapToInt(Libro::getPrecio).sum();
         return precioTotal;
     }
 
