@@ -62,6 +62,13 @@ public class CarritoTest{
         assertThat(carrito.contidadDeUnItem(libroElPerfume)).isEqualTo(2);
     }
 
+    @Test
+    public void agrego2ItemsAUncarritoYEstanYlugegoAgrego2MasDelMismoDebeHaber4(){
+        carrito.agregarLibro(libroGuerraDeLosMundos,2);
+        assertThat(carrito.contidadDeUnItem(libroGuerraDeLosMundos)).isEqualTo(2);
+        carrito.agregarLibro(libroGuerraDeLosMundos,2);
+        assertThat(carrito.contidadDeUnItem(libroGuerraDeLosMundos)).isEqualTo(4);
+    }
 
     @Test
     public void noSePuedenAgregarCantidadesNegativasDeUnLibro(){

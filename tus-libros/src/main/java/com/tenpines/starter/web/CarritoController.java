@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -32,6 +33,8 @@ public class CarritoController {
 
     private Sesion sesion;
     private Cliente unCliente;
+    private Carrito unCarrito;
+    private List<Libro> itemsCarrito = new ArrayList<Libro>();
 
     @Autowired
     public CarritoController(ServicioDeSesion servicioDeSesion, ServicioDeCatalogo servicioDeCatalogo) {
@@ -41,7 +44,8 @@ public class CarritoController {
 
     @RequestMapping(Endpoints.HOME)
     String home(Model model) {
-        //model.addAttribute("carrito", obtenerUnCarrito());
+        model.addAttribute("itemsCarrito", itemsCarrito);
+        model.addAttribute("carrito", unCarrito);
         model.addAttribute("cliente", unCliente);
         model.addAttribute("libros", catalogo());
         return "nuevaCompra";
@@ -50,18 +54,19 @@ public class CarritoController {
     @RequestMapping(value = Endpoints.AGREGAR_CARRITO, method = RequestMethod.POST)
     void crearUnCarrito(HttpServletResponse response) throws IOException {
         sesion = servicioDeSesion.crearCarrito(unCliente);
+        unCarrito = mostrarCarritoActual();
         response.sendRedirect(Endpoints.HOME);
-
     }
+
 
     @RequestMapping(value = Endpoints.AGREGAR_ITEM, method = RequestMethod.POST)
     void agregarUnLibro(@RequestParam Map<String,String> requestParams, HttpServletResponse response) throws IOException {
         Long idLibro = Long.valueOf(requestParams.get("libro"));
         Integer cantidad = Integer.valueOf(requestParams.get("cantidad"));
+        itemsCarrito = servicioDeSesion.mostrarLibrosDeCarrito(sesion.getCarrito().getId());
         servicioDeSesion.agregarLibro(sesion,idLibro,cantidad);
         response.sendRedirect(Endpoints.HOME);
     }
-
 
     @RequestMapping(value=Endpoints.MOSTRAR_ITEMS, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
@@ -83,9 +88,7 @@ public class CarritoController {
         return servicioDeCliente.mostrarClientes();
     }
 
-    private Carrito obtenerUnCarrito(){
-        return sesion.getCarrito();
-    }
+
 
     @RequestMapping(value=Endpoints.OBTENER_CARRITO, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
@@ -99,7 +102,21 @@ public class CarritoController {
         response.sendRedirect(Endpoints.HOME); // TODO TERMINAR CHECKOUT CARRITO
     }
 
+
     private Iterable<Libro> catalogo(){
         return servicioCatalogo.mostrarCatalogo();
+    }
+
+    private Carrito mostrarCarritoActual() {
+        return obtenerUnCarrito();
+    }
+
+    private Carrito obtenerUnCarrito(){
+        return sesion.getCarrito();
+    }
+
+    private List<Libro> itemsDeCarrito(Long idCarrito){
+        List<Libro> carrito = servicioDeSesion.obtenerUnCarrito(idCarrito);
+        return  carrito;
     }
 }

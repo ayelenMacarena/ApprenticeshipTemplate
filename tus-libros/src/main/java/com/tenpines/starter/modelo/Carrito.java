@@ -12,7 +12,7 @@ public class Carrito implements Serializable, Cloneable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Libro> items;
 
     public Carrito(){
@@ -40,8 +40,6 @@ public class Carrito implements Serializable, Cloneable{
     public List<Libro> getItems() {
         return items;
     }
-
-
 
     // METODOS
 

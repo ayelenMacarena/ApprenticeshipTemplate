@@ -65,7 +65,4 @@ public class CajeroTest {
 
         assertThat(cajero.cobrar(carrito, tarjetaDeCreaditoValida)).isEqualTo(true);
     }
-
-
-
 }

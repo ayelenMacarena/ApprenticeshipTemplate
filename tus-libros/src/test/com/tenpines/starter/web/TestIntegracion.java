@@ -64,9 +64,30 @@ public class TestIntegracion extends SpringTestBase {
 
         servicioDeSesion.agregarLibro(sesion, libro.getId(), 1);
 
-//        assertThat((servicioDeSesion.mostrarLibrosDeCarrito(sesion.getId_sesion())).stream().filter(li -> li.equals(libro))).contains(libro);
         assertThat((servicioDeSesion.mostrarLibrosDeCarrito(sesion.getId_sesion())).contains(libro));
-    }                //TODO CHECKEAR ESTE EQUALS -- CORRESPONDE A *1
+    }
+
+    @Test
+    public void agrego2ItemsAUncarritoYEstanYlugegoAgrego2MasDelMismoDebeHaber4() throws Exception {
+        Cliente cliente = Cliente.crearCliente("1234");
+        servicioDeCliente.almacenar(cliente);
+        Sesion sesion = servicioDeSesion.crearCarrito(cliente);
+        Carrito carrito = sesion.getCarrito();
+        Libro libro = servicioDeCatalogo.agregarLibroAlCatalogo("Guerra de los mundos", "123456789", 45);
+        Libro libro2 = servicioDeCatalogo.agregarLibroAlCatalogo("El perfume", "987654321", 75);
+
+        servicioDeSesion.agregarLibro(sesion, libro.getId(), 1);
+
+        assertThat((servicioDeSesion.mostrarLibrosDeCarrito(sesion.getId_sesion())).contains(libro));
+        assertThat((servicioDeSesion.mostrarLibrosDeCarrito(sesion.getId_sesion()).size())).isEqualTo(1);
+
+        servicioDeSesion.agregarLibro(sesion, libro2.getId(), 1);
+
+
+        assertThat((servicioDeSesion.mostrarLibrosDeCarrito(sesion.getId_sesion())).contains(libro));
+        assertThat((servicioDeSesion.mostrarLibrosDeCarrito(sesion.getId_sesion())).contains(libro2));
+        assertThat((servicioDeSesion.mostrarLibrosDeCarrito(sesion.getId_sesion()).size())).isEqualTo(2);
+    }
 
     @Test
     public void alQuererAgregarUnItemConUnaSesionExpiradaDebeLanzarUnExcepcionYNoAgregarElItem(){
@@ -86,6 +107,26 @@ public class TestIntegracion extends SpringTestBase {
         }
     }
 
+    @Test
+    public void agrego3ItemsAUncarritoYEstanYlugegoAgrego2MasDeOtroMismoYEstanYElTotalEs5() throws Exception {
+        Cliente cliente = Cliente.crearCliente("1234");
+        servicioDeCliente.almacenar(cliente);
+        Sesion sesion = servicioDeSesion.crearCarrito(cliente);
+        Carrito carrito = sesion.getCarrito();
+        Libro libro = servicioDeCatalogo.agregarLibroAlCatalogo("Guerra de los mundos", "123456789", 45);
+        Libro libro2 = servicioDeCatalogo.agregarLibroAlCatalogo("El perfume", "987654321", 75);
+
+        servicioDeSesion.agregarLibro(sesion, libro.getId(), 3);
+
+        assertThat((servicioDeSesion.mostrarLibrosDeCarrito(sesion.getId_sesion())).contains(libro));
+        assertThat((servicioDeSesion.mostrarLibrosDeCarrito(sesion.getId_sesion()).size())).isEqualTo(3);
+
+        servicioDeSesion.agregarLibro(sesion, libro2.getId(), 2);
+
+        assertThat((servicioDeSesion.mostrarLibrosDeCarrito(sesion.getId_sesion())).contains(libro));
+        assertThat((servicioDeSesion.mostrarLibrosDeCarrito(sesion.getId_sesion())).contains(libro2));
+        assertThat((servicioDeSesion.mostrarLibrosDeCarrito(sesion.getId_sesion()).size())).isEqualTo(5);
+    }
 //    @Test
 //    public void cobrarUnCarritoCon1Itemy1Unidad(){
 //        carrito.agregarLibro(proveedor.crearLibro(),1);

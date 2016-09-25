@@ -100,6 +100,10 @@ public class ServicioDeSesion {
         }
     }
 
+    public List<Libro> obtenerUnCarrito(Long id){
+        return servicioDeCarritos.mostrarLibrosDeCarrito(id);
+    }
+
     public static String mensajeDeErrorSesionExpirada() {
         return "Su sesión está expirada";
     }

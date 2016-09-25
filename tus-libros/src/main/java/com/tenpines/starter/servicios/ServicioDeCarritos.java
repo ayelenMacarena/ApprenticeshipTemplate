@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 
 @Service
@@ -23,14 +24,21 @@ public class ServicioDeCarritos {
     @Autowired
     private ServicioDeCatalogo servicioDeCatalogo;
 
+    @Autowired
+    private EntityManager em;
+
     @Transactional
     public void almacenar(Carrito carrito) {
         repo.save(carrito);
     }
 
-    public Carrito buscarElCarrito(Long id) {return repo.findOne(id);}
+    public Carrito buscarElCarrito(Long id) {
+        return repo.findOne(id);
+    }
 
-    public List<Carrito> mostrarCarritos(){ return repo.findAll();}
+    public List<Carrito> mostrarCarritos(){
+        return repo.findAll();
+    }
 
     public Carrito nuevoCarrito() {
         Carrito carrito = Carrito.crearCarrito();
@@ -40,6 +48,7 @@ public class ServicioDeCarritos {
 
     public void agregarLibro(Carrito unCarrito, Long unLibro, Integer cantidad){
         Libro miLibroAAgregar = servicioDeCatalogo.darLibro(unLibro);
+        unCarrito.getItems().removeAll(unCarrito.getItems());
         unCarrito.agregarLibro(miLibroAAgregar,cantidad);
         almacenar(unCarrito);
     }
@@ -48,5 +57,4 @@ public class ServicioDeCarritos {
         Carrito carrito = repo.findOne(id);
         return carrito.getItems();
     }
-
 }

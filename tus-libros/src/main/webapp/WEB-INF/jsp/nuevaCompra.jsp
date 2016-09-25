@@ -48,8 +48,15 @@
                 <br/>
                 <li class="crt">Carrito id:${carrito.getId()}</li>
                 <br/>
-                <li class="crt">ContenidoActual id:${carrito}</li>
+                <li class="crt">ContenidoActual:<c:forEach items="${carrito.getItems()}" var="item">
+                    <td>${item.getNombreLibro()}</td>
+                </c:forEach></li>
                 <br/>
+
+            FUNCIONA MAL, SOLO MUESTRA LO ULTIMO QUE AGREGAS, NO MUESTRA TODO. PERO EN /LISTCART FUNCIONA TODO PERFECTO
+
+
+
                 ---------------------------------------------------------
         </ul>
 
