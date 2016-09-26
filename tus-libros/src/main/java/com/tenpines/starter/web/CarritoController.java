@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
-public class CarritoController {
+public class CarritoController extends GlobalExceptionHandlingController{
 
     private ServicioDeCatalogo servicioCatalogo;
     private ServicioDeSesion servicioDeSesion;
