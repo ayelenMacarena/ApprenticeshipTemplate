@@ -1,9 +1,12 @@
 package com.tenpines.starter.modelo;
 
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 public class VentaConcretada implements Serializable, Cloneable{
@@ -16,16 +19,14 @@ public class VentaConcretada implements Serializable, Cloneable{
     private Long id;
 
     @OneToOne
-    public Carrito unCarrito;
-
-    //public List<Libro> itemsDeLaVenta;
+    public Carrito carrito;
 
     @Column
     public Integer precioTotal;
 
     @Column
-    public LocalDateTime fechaYHoraDeVenta;
-
+    @Type(type="timestamp")
+    private Timestamp fechaYHoraDeVenta;
 
     public Long getId() {
         return id;
@@ -35,9 +36,9 @@ public class VentaConcretada implements Serializable, Cloneable{
         this.id = id;
     }
 
-    public Carrito getUnCarrito(){return this.unCarrito;}
+    public Carrito getCarrito(){return this.carrito;}
 
-    public void setUnCarrito(Carrito unCarrito) {this.unCarrito = unCarrito;}
+    public void setCarrito(Carrito carrito) {this.carrito = carrito;}
 
     public Integer getPrecioTotal() {
         return precioTotal;
@@ -48,18 +49,18 @@ public class VentaConcretada implements Serializable, Cloneable{
     }
 
     public LocalDateTime getFechaYHoraDeVenta() {
-        return fechaYHoraDeVenta;
+        return fechaYHoraDeVenta.toLocalDateTime();
     }
 
-    public void setFechaYHoraDeVenta(LocalDateTime fechaYHoraDeVenta) {
+    public void setFechaYHoraDeVenta(Timestamp fechaYHoraDeVenta) {
         this.fechaYHoraDeVenta = fechaYHoraDeVenta;
     }
 
     public static VentaConcretada nuevaVentaConcretada(Carrito unCarrito, Integer precioTotal, LocalDateTime fechaYHoraDeVenta){
         VentaConcretada ventaConcretada = new VentaConcretada();
-        ventaConcretada.setUnCarrito(unCarrito);
+        ventaConcretada.setCarrito(unCarrito);
         ventaConcretada.setPrecioTotal(precioTotal);
-        ventaConcretada.setFechaYHoraDeVenta(fechaYHoraDeVenta);
+        ventaConcretada.setFechaYHoraDeVenta(Timestamp.valueOf(fechaYHoraDeVenta));
         return ventaConcretada;
     }
 }

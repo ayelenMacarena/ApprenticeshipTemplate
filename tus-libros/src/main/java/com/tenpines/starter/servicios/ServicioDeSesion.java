@@ -29,9 +29,6 @@ public class ServicioDeSesion {
     private RepositorioDeSesiones repositorio;
 
     @Autowired
-    private ServicioDeCajero servicioDeCajero;
-
-    @Autowired
     private EntityManager em;
 
     @Autowired
@@ -43,6 +40,7 @@ public class ServicioDeSesion {
         }
         Carrito carrito = servicioDeCarritos.nuevoCarrito();
         Sesion nuevaSesion = Sesion.crearSesion(carrito,unCliente);
+
         repositorio.save(nuevaSesion);
         return nuevaSesion;
     }
@@ -116,9 +114,27 @@ public class ServicioDeSesion {
     public void cobrarCarrito(Long carritoId, String nombreDeDuenio,Long numeroDeTarjeta, LocalDate fechaDeExpiracion) {
         Carrito carrito = servicioDeCarritos.buscarElCarrito(carritoId);
         TarjetaDeCredito tarjetaValidada = TarjetaDeCredito.nuevaTarjeta(numeroDeTarjeta, fechaDeExpiracion, nombreDeDuenio);
+        verificarQueNoSeCobroElCarrito(carritoId);
 
-        VentaConcretada ventaConcretada = servicioDeCajero.cobrarUnaCompra(carrito,tarjetaValidada);
+        Cajero cajero = new Cajero();
+
+        VentaConcretada ventaConcretada = cajero.cobrar(carrito, tarjetaValidada);
         servicioDeVentasConcretadas.registrarVenta(ventaConcretada);
     }
-    //TODO : KEVIN TERMINAR (RECORDATORIO)
+
+    private void verificarQueNoSeCobroElCarrito(Long carritoId) {
+            ///TODO ROmpe
+        List<VentaConcretada> unaVenta = em.createQuery("select c from VentaConcretada c where c.carrito.id = :id", VentaConcretada.class).
+                    setParameter("id", carritoId).getResultList();
+        if(!unaVenta.isEmpty()){
+            throw new RuntimeException(mensajeDeErrorCuandoYaSeFacturoElCarrito());
+        }
+    }
+
+    private String mensajeDeErrorCuandoYaSeFacturoElCarrito() {
+        return "El carrito que quiere cobrar ya se facturó";
+    }
+
+
 }
+

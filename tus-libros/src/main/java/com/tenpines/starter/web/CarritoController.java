@@ -52,10 +52,11 @@ public class CarritoController extends GlobalExceptionHandlingController{
         return "nuevaCompra";
     }
 
-    @RequestMapping(Endpoints.COBRAR_CARRITO_PRUEBA)
+    @RequestMapping(Endpoints.COBRAR_CARRITO_PAGINA)
     String cobrarCarrito(Model model) {
         return "cobrarCarrito";
     }
+
 
     @RequestMapping(value = Endpoints.AGREGAR_CARRITO, method = RequestMethod.POST)
     void crearUnCarrito(HttpServletResponse response) throws IOException {

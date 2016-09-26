@@ -29,8 +29,4 @@ public class GlobalExceptionHandlingController extends IOException {
         return new ResponseEntity(message,HttpStatus.BAD_REQUEST);
 
     }
-
-
-
-
 }

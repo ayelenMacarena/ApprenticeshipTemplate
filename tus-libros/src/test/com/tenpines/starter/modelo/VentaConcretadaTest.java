@@ -1,8 +1,8 @@
 package com.tenpines.starter.modelo;
 
-import org.junit.Before;
 import org.junit.Test;
 
+import java.security.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +23,7 @@ public class VentaConcretadaTest {
         carrito.agregarLibro(libro,1);
         VentaConcretada venta = VentaConcretada.nuevaVentaConcretada(carrito, 70,horaYFecha);
 
-        assertThat(venta.getUnCarrito().getItems()).isNotEmpty();
+        assertThat(venta.getCarrito().getItems()).isNotEmpty();
         assertThat(venta.getFechaYHoraDeVenta()).isEqualTo(horaYFecha);
         assertThat(venta.getPrecioTotal()).isNotNull();
     }
