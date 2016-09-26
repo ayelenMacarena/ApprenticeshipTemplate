@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import java.sql.Timestamp;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -28,9 +29,13 @@ public class ServicioDeSesion {
     private RepositorioDeSesiones repositorio;
 
     @Autowired
+    private ServicioDeCajero servicioDeCajero;
+
+    @Autowired
     private EntityManager em;
 
-
+    @Autowired
+    private ServicioDeVentasConcretadas servicioDeVentasConcretadas;
 
     public Sesion crearCarrito(Cliente unCliente) {
         if(unCliente == null){
@@ -108,6 +113,12 @@ public class ServicioDeSesion {
         return "Su sesión está expirada";
     }
 
-    public void cobrarCarrito(Sesion sesion, Long carritoId) {
-    }     //TODO : KEVIN TERMINAR (RECORDATORIO)
+    public void cobrarCarrito(Long carritoId, String nombreDeDuenio,Long numeroDeTarjeta, LocalDate fechaDeExpiracion) {
+        Carrito carrito = servicioDeCarritos.buscarElCarrito(carritoId);
+        TarjetaDeCredito tarjetaValidada = TarjetaDeCredito.nuevaTarjeta(numeroDeTarjeta, fechaDeExpiracion, nombreDeDuenio);
+
+        VentaConcretada ventaConcretada = servicioDeCajero.cobrarUnaCompra(carrito,tarjetaValidada);
+        servicioDeVentasConcretadas.registrarVenta(ventaConcretada);
+    }
+    //TODO : KEVIN TERMINAR (RECORDATORIO)
 }

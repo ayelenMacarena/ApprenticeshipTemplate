@@ -52,12 +52,15 @@
                     <td>${item.getNombreLibro()}</td>
                 </c:forEach></li>
                 <br/>
-
-            FUNCIONA MAL, SOLO MUESTRA LO ULTIMO QUE AGREGAS, NO MUESTRA TODO. PERO EN /LISTCART FUNCIONA TODO PERFECTO
-
-
-
                 ---------------------------------------------------------
+
+
+            <form method="get" action="/cobrarCarrito">
+                <button type="submit">FINALIZAR COMPRA</button>
+            </form>
+
+
+
         </ul>
 
     </body>

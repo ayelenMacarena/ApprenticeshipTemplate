@@ -10,7 +10,7 @@ public class LibroDeVentasTest {
 
     private LibroDeVentas libroDeVentas = new LibroDeVentas();
     private Carrito carrito = Carrito.crearCarrito();
-    private VentaConcretada venta = VentaConcretada.nuevaVentaConcretada(carrito.getItems(), 150, LocalDateTime.now());
+    private VentaConcretada venta = VentaConcretada.nuevaVentaConcretada(carrito, 150, LocalDateTime.now());
 
     @Test
     public void alCrearUnLibroDeVentasSeDebeInicializarVacio(){
@@ -27,7 +27,7 @@ public class LibroDeVentasTest {
 
 //    @Test
 //    public void noSePuedeCobrarUnCarroVacio(){
-//        try {cajero.cobrar(carrito, tarjetaDeCreaditoValida);
+//        try {cajero.cobrar(carrito, tarjetaDeCreditoValida);
 //            assertTrue("nunca deberia llegar aca", false);
 //        } catch (RuntimeException excepcionNoCobrarCarrosVacios) {
 //            assertThat(excepcionNoCobrarCarrosVacios.getMessage()).isEqualTo(Cajero.mensajeDeErrorCuandoQuieroCobrarUnCarroVacio());

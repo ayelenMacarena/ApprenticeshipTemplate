@@ -13,19 +13,19 @@ public class CajeroTest {
     Carrito carrito ;
     Cajero cajero;
     ProveedorDeObjetos proveedor;
-    TarjetaDeCredito tarjetaDeCreaditoValida;
+    TarjetaDeCredito tarjetaDeCreditoValida;
 
     @Before
     public void Setup(){
         carrito = Carrito.crearCarrito();
         cajero = new Cajero();
         proveedor = new ProveedorDeObjetos();
-        tarjetaDeCreaditoValida = proveedor.tarjetaDeCreditoValida();
+        tarjetaDeCreditoValida = proveedor.tarjetaDeCreditoValida();
     }
 
     @Test
     public void noSePuedeCobrarUnCarroVacio(){
-        try {cajero.cobrar(carrito, tarjetaDeCreaditoValida);
+        try {cajero.cobrar(carrito, tarjetaDeCreditoValida);
             assertTrue("nunca deberia llegar aca", false);
         } catch (RuntimeException excepcionNoCobrarCarrosVacios) {
             assertThat(excepcionNoCobrarCarrosVacios.getMessage()).isEqualTo(Cajero.mensajeDeErrorCuandoQuieroCobrarUnCarroVacio());
@@ -35,34 +35,26 @@ public class CajeroTest {
     @Test
     public void cobrarUnCarritoConUnaUnidadDeUnMismoItemYCobraEseLibro(){
         carrito.agregarLibro(proveedor.crearLibro(),1);
-        assertThat(cajero.cobrar(carrito, tarjetaDeCreaditoValida)).isEqualTo(true);
+        assertThat(cajero.cobrar(carrito, tarjetaDeCreditoValida).getPrecioTotal()).isEqualTo(45);
     }
 
     @Test
     public void cobrarUnCarritoConDosUnidadesDeUnMismoItemCobraElPrecioPorLaCantidad(){
         carrito.agregarLibro(proveedor.crearLibro(),2);
-        assertThat(cajero.cobrar(carrito, tarjetaDeCreaditoValida)).isEqualTo(true);
+        assertThat(cajero.cobrar(carrito, tarjetaDeCreditoValida).getPrecioTotal()).isEqualTo(90);
     }
 
     @Test
     public void cobrarUnCarritoCon2LibrosDiferentesCobraLaSumaDeLosMismos(){
         carrito.agregarLibro(proveedor.crearLibro(),1);
         carrito.agregarLibro(proveedor.crearOtroLibro(),1);
-        assertThat(cajero.cobrar(carrito, tarjetaDeCreaditoValida)).isEqualTo(true);
+        assertThat(cajero.cobrar(carrito, tarjetaDeCreditoValida).getPrecioTotal()).isEqualTo(140);
     }
 
     @Test
     public void cobrarUnCarritoConDosUnidadesDeUnLibroYUnaUnidadDeOtroCobraLaSumaDeTodo(){
         carrito.agregarLibro(proveedor.crearLibro(),2);
         carrito.agregarLibro(proveedor.crearOtroLibro(),1);
-        assertThat(cajero.cobrar(carrito, tarjetaDeCreaditoValida)).isEqualTo(true);
-    }
-
-    @Test
-    public void cobrarUnCarritoQueTieneUnLibroConUnaTarjetaDeCreditoValida(){
-        carrito.agregarLibro(proveedor.crearLibro(),2);
-        carrito.agregarLibro(proveedor.crearOtroLibro(),1);
-
-        assertThat(cajero.cobrar(carrito, tarjetaDeCreaditoValida)).isEqualTo(true);
+        assertThat(cajero.cobrar(carrito, tarjetaDeCreditoValida).getPrecioTotal()).isEqualTo(185);
     }
 }

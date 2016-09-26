@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -51,6 +52,11 @@ public class CarritoController {
         return "nuevaCompra";
     }
 
+    @RequestMapping(Endpoints.COBRAR_CARRITO_PRUEBA)
+    String cobrarCarrito(Model model) {
+        return "cobrarCarrito";
+    }
+
     @RequestMapping(value = Endpoints.AGREGAR_CARRITO, method = RequestMethod.POST)
     void crearUnCarrito(HttpServletResponse response) throws IOException {
         sesion = servicioDeSesion.crearCarrito(unCliente);
@@ -76,8 +82,10 @@ public class CarritoController {
 
     @RequestMapping(value = Endpoints.LOGUEAR_CLIENTE, method = RequestMethod.POST)
     private void loguearCliente( @RequestParam Map<String,String> requestParams , HttpServletResponse response) throws IOException {
+
         Long idUsuario = Long.valueOf(requestParams.get("nombre"));
         String password = requestParams.get("password");
+
         unCliente = servicioDeCliente.clienteLogueado(idUsuario, password);
         response.sendRedirect(Endpoints.HOME);
     }
@@ -97,9 +105,21 @@ public class CarritoController {
     }
 
     @RequestMapping(value = Endpoints.COBRAR_CARRITO, method = RequestMethod.POST)
-    void checkoutearCarrito(@RequestParam(value = "carrito") Long carritoId, HttpServletResponse response) throws IOException {
-        servicioDeSesion.cobrarCarrito(sesion, carritoId);
-        response.sendRedirect(Endpoints.HOME); // TODO TERMINAR CHECKOUT CARRITO
+    void checkoutearCarrito(@RequestParam Map<String,String> requestParams, HttpServletResponse response) throws IOException {
+
+        Long idCarrito = sesion.getCarrito().getId();   //TODO RECIBIR POR PARAMETRO ID_CARRITO
+
+        Long numeroTarjeta = Long.valueOf(requestParams.get("numeroTarjeta"));
+
+        Integer anioExpiracion = Integer.valueOf(requestParams.get("anioExpiracion"));
+        Integer mesExpiracion = Integer.valueOf(requestParams.get("mesExpiracion"));
+
+        String nombreCliente = requestParams.get("nombreDuenio");
+
+        LocalDate fechaExpiracion = LocalDate.of(anioExpiracion,mesExpiracion,1); //yyyy-mm-dd
+
+        servicioDeSesion.cobrarCarrito(idCarrito, nombreCliente, numeroTarjeta, fechaExpiracion);
+        response.sendRedirect(Endpoints.HOME);
     }
 
 

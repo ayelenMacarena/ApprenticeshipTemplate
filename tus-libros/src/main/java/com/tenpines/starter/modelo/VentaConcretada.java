@@ -15,8 +15,10 @@ public class VentaConcretada implements Serializable, Cloneable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(fetch = FetchType.EAGER)
-    public List<Libro> itemsDeLaVenta;
+    @OneToOne
+    public Carrito unCarrito;
+
+    //public List<Libro> itemsDeLaVenta;
 
     @Column
     public Integer precioTotal;
@@ -33,13 +35,9 @@ public class VentaConcretada implements Serializable, Cloneable{
         this.id = id;
     }
 
-    public List<Libro> getItemsDeLaVenta() {
-        return itemsDeLaVenta;
-    }
+    public Carrito getUnCarrito(){return this.unCarrito;}
 
-    public void setItemsDeLaVenta(List<Libro> itemsDeLaVenta) {
-        this.itemsDeLaVenta = itemsDeLaVenta;
-    }
+    public void setUnCarrito(Carrito unCarrito) {this.unCarrito = unCarrito;}
 
     public Integer getPrecioTotal() {
         return precioTotal;
@@ -57,9 +55,9 @@ public class VentaConcretada implements Serializable, Cloneable{
         this.fechaYHoraDeVenta = fechaYHoraDeVenta;
     }
 
-    public static VentaConcretada nuevaVentaConcretada(List<Libro> ItemsDeLaVenta, Integer precioTotal, LocalDateTime fechaYHoraDeVenta){
+    public static VentaConcretada nuevaVentaConcretada(Carrito unCarrito, Integer precioTotal, LocalDateTime fechaYHoraDeVenta){
         VentaConcretada ventaConcretada = new VentaConcretada();
-        ventaConcretada.setItemsDeLaVenta(ItemsDeLaVenta);
+        ventaConcretada.setUnCarrito(unCarrito);
         ventaConcretada.setPrecioTotal(precioTotal);
         ventaConcretada.setFechaYHoraDeVenta(fechaYHoraDeVenta);
         return ventaConcretada;

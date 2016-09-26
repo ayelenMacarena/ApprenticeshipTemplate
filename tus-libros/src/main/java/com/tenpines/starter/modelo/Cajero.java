@@ -7,7 +7,7 @@ public class Cajero {
 
     public VentaConcretada cobrar(Carrito unCarrito, TarjetaDeCredito tarjetaDeCreaditoValida){
         validarSiUnCarritoEstaVacio(unCarrito);
-        VentaConcretada venta = VentaConcretada.nuevaVentaConcretada(unCarrito.getItems(), precioTotalCompra(unCarrito), LocalDateTime.now());
+        VentaConcretada venta = VentaConcretada.nuevaVentaConcretada(unCarrito, precioTotalCompra(unCarrito), LocalDateTime.now());
         return venta;
     }
 
