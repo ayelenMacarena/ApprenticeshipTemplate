@@ -104,6 +104,8 @@ public class ServicioDeSesion {
     }
 
     public List<Libro> obtenerUnCarrito(Long id){
+        Sesion sesion = buscarSesionParaElCarrito(id);
+        chequearSesionExpirada(sesion);
         return servicioDeCarritos.mostrarLibrosDeCarrito(id);
     }
 
@@ -112,6 +114,8 @@ public class ServicioDeSesion {
     }
 
     public void cobrarCarrito(Long carritoId, String nombreDeDuenio,Long numeroDeTarjeta, LocalDate fechaDeExpiracion) {
+        Sesion sesion = buscarSesionParaElCarrito(carritoId);
+        chequearSesionExpirada(sesion);
         Carrito carrito = servicioDeCarritos.buscarElCarrito(carritoId);
         TarjetaDeCredito tarjetaValidada = TarjetaDeCredito.nuevaTarjeta(numeroDeTarjeta, fechaDeExpiracion, nombreDeDuenio);
         verificarQueNoSeCobroElCarrito(carritoId);
@@ -123,18 +127,40 @@ public class ServicioDeSesion {
     }
 
     private void verificarQueNoSeCobroElCarrito(Long carritoId) {
-            ///TODO ROmpe
-        List<VentaConcretada> unaVenta = em.createQuery("select c from VentaConcretada c where c.carrito.id = :id", VentaConcretada.class).
-                    setParameter("id", carritoId).getResultList();
-        if(!unaVenta.isEmpty()){
-            throw new RuntimeException(mensajeDeErrorCuandoYaSeFacturoElCarrito());
+        servicioDeVentasConcretadas.verificarQueNoSeHayaVendidoYaElCarrito(carritoId);
+    }
+
+
+    public List<VentaConcretada> mostrarVentasParaUnCliente(Long idUsuario, String password) {
+        servicioDeCliente.loguearCliente(idUsuario,password);
+        Sesion sesion = buscarSesionParaElCliente(idUsuario);
+        chequearSesionExpirada(sesion);
+        List<Carrito> listaDeCarritos = buscarCarritosDelCliente(idUsuario);
+        return servicioDeVentasConcretadas.mostrarVentasDeCarritos(listaDeCarritos);
+    }
+
+    private List<Carrito> buscarCarritosDelCliente(Long idUsuario) {
+        List<Carrito> carritos = em.createQuery("select c.carrito from Sesion c where c.cliente.id = :id", Carrito.class).
+                setParameter("id", idUsuario).getResultList();
+        return carritos;
+    }
+
+
+    private Sesion buscarSesionParaElCliente(Long idUsuario) {
+        try {
+            Sesion sesion = em.createQuery("select u from Sesion u where u.cliente.id = :id", Sesion.class).
+                    setParameter("id", idUsuario).getSingleResult();
+            return sesion;}
+        catch (RuntimeException NoHaySesionParaElUsuarioIngresado) {
+
+            throw new RuntimeException(mensajeDeErrorCuandoNoExisteSesionParaElUsuarioSeleccionado());
         }
+
     }
 
-    private String mensajeDeErrorCuandoYaSeFacturoElCarrito() {
-        return "El carrito que quiere cobrar ya se facturó";
+    private static String mensajeDeErrorCuandoNoExisteSesionParaElUsuarioSeleccionado() {
+        return "No existe sesión para el cliente ingresado";
     }
-
 
 }
 

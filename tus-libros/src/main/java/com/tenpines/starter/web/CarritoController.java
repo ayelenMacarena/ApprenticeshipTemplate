@@ -1,9 +1,6 @@
 package com.tenpines.starter.web;
 
-import com.tenpines.starter.modelo.Carrito;
-import com.tenpines.starter.modelo.Cliente;
-import com.tenpines.starter.modelo.Libro;
-import com.tenpines.starter.modelo.Sesion;
+import com.tenpines.starter.modelo.*;
 import com.tenpines.starter.servicios.ServicioDeCatalogo;
 import com.tenpines.starter.servicios.ServicioDeCliente;
 import com.tenpines.starter.servicios.ServicioDeSesion;
@@ -97,6 +94,13 @@ public class CarritoController extends GlobalExceptionHandlingController{
         return servicioDeCliente.mostrarClientes();
     }
 
+    @RequestMapping(value=Endpoints.LISTAR_VENTAS, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    List<VentaConcretada> obtenerVentasParaUnCliente(@RequestParam Map<String,String> params){
+        Long idUsuario = Long.valueOf(params.get("idUsuario"));
+        String password = params.get("password");
+        return servicioDeSesion.mostrarVentasParaUnCliente(idUsuario, password);
+    }
 
 
     @RequestMapping(value=Endpoints.OBTENER_CARRITO, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)

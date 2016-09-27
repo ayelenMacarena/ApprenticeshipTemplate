@@ -18,15 +18,14 @@ public class GlobalExceptionHandlingController extends IOException {
     @ExceptionHandler(Exception.class)
     public ResponseEntity handleDefaultException(HttpServletResponse response, Exception exception)
             throws Exception {
-        // Rethrow annotated exceptions or they will be processed here instead.
         if (AnnotationUtils.findAnnotation(exception.getClass(),
                 ResponseStatus.class) != null)
             throw exception;
-
+        HttpStatus statusActual = HttpStatus.BAD_REQUEST;
         String message = exception.getMessage();
-        message = "Error " + HttpStatus.BAD_REQUEST + " - " + message;
+        message = "Error " + statusActual + " - " + message;
 
-        return new ResponseEntity(message,HttpStatus.BAD_REQUEST);
+        return new ResponseEntity(message,statusActual);
 
     }
 }
