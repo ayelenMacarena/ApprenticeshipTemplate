@@ -123,7 +123,6 @@ public class ServicioDeSesion {
     }
 
     private void verificarQueNoSeCobroElCarrito(Long carritoId) {
-            ///TODO ROmpe
         List<VentaConcretada> unaVenta = em.createQuery("select c from VentaConcretada c where c.carrito.id = :id", VentaConcretada.class).
                     setParameter("id", carritoId).getResultList();
         if(!unaVenta.isEmpty()){
