@@ -72,5 +72,16 @@ public class Libro implements Serializable, Cloneable{
         }
         return true;
     }
+
+    public boolean igualId(Object algo){
+        if(algo == this.getId()){
+            return true;
+        }
+        return false;
+    }
+
+    public boolean contieneEsteId(Long id){
+       return this.igualId(id);
+    }
 }
 

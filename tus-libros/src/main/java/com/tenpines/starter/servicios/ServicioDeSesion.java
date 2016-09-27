@@ -127,14 +127,21 @@ public class ServicioDeSesion {
     }
 
     private void verificarQueNoSeCobroElCarrito(Long carritoId) {
-        servicioDeVentasConcretadas.verificarQueNoSeHayaVendidoYaElCarrito(carritoId);
+        List<VentaConcretada> unaVenta = em.createQuery("select c from VentaConcretada c where c.carrito.id = :id", VentaConcretada.class).
+                    setParameter("id", carritoId).getResultList();
+        if(!unaVenta.isEmpty()){
+            throw new RuntimeException(mensajeDeErrorCuandoYaSeFacturoElCarrito());
+        }
     }
-
 
     public List<VentaConcretada> mostrarVentasParaUnCliente(Long idUsuario, String password) {
         Cliente cliente = servicioDeCliente.clienteLogueado(idUsuario,password);
         List<Carrito> listaDeCarritos = buscarCarritosDelCliente(idUsuario);
         return servicioDeVentasConcretadas.mostrarVentasDeCarritos(listaDeCarritos);
+    }
+
+    private String mensajeDeErrorCuandoYaSeFacturoElCarrito() {
+        return "El carrito que quiere cobrar ya se facturó";
     }
 
     private List<Carrito> buscarCarritosDelCliente(Long idUsuario) {

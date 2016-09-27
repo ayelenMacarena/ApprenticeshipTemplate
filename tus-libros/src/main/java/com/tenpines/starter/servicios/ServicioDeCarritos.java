@@ -1,7 +1,6 @@
 package com.tenpines.starter.servicios;
 
 import  com.tenpines.starter.modelo.Carrito;
-import com.tenpines.starter.modelo.Cliente;
 import com.tenpines.starter.modelo.Libro;
 import com.tenpines.starter.repositorios.RepositorioDeCarritos;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,10 +45,24 @@ public class ServicioDeCarritos {
     }
 
     public void agregarLibro(Carrito unCarrito, Long unLibro, Integer cantidad){
+        validarQueElLibroPertenezcaALaEditorial(unLibro);
         Libro miLibroAAgregar = servicioDeCatalogo.darLibro(unLibro);
         unCarrito.getItems().removeAll(unCarrito.getItems());
         unCarrito.agregarLibro(miLibroAAgregar,cantidad);
         almacenar(unCarrito);
+    }
+
+
+    private void validarQueElLibroPertenezcaALaEditorial(Long libroId) {
+        List<Libro> catalogo = em.createQuery("select libro from Libro libro where libro.id = :id", Libro.class).
+                setParameter("id", libroId).getResultList();
+        if(catalogo.isEmpty()){
+            throw new RuntimeException(mensajeDeErrorCuandoElLibroNoExisteEnLaEditorial());
+        }
+    }
+
+    private static String mensajeDeErrorCuandoElLibroNoExisteEnLaEditorial() {
+        return "El libro que intenta agregar al carrito no corresponde a esta editorial";
     }
 
     public List<Libro> mostrarLibrosDeCarrito(Long id) {
