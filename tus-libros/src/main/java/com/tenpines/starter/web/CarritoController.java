@@ -97,7 +97,7 @@ public class CarritoController extends GlobalExceptionHandlingController{
     @RequestMapping(value=Endpoints.LISTAR_VENTAS, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     List<VentaConcretada> obtenerVentasParaUnCliente(@RequestParam Map<String,String> params){
-        Long idUsuario = Long.valueOf(params.get("idUsuario"));
+        Long idUsuario = Long.valueOf(params.get("nombre"));
         String password = params.get("password");
         return servicioDeSesion.mostrarVentasParaUnCliente(idUsuario, password);
     }

@@ -48,7 +48,10 @@ public class ServicioDeVentasConcretadas {
         List<VentaConcretada> listaDeVentas = new ArrayList<>();
         for (int i=0; i<listaDeCarritos.size(); i++) {
             Carrito carrito = listaDeCarritos.get(i);
-            listaDeVentas.add(getVentaConcretadasParaUnCarrito(carrito.getId()).getSingleResult());
+            List<VentaConcretada> venta = getVentaConcretadasParaUnCarrito(carrito.getId()).getResultList();
+            if(!venta.isEmpty()){
+            listaDeVentas.add(venta.get(0));}
+
         }
 
         return listaDeVentas;

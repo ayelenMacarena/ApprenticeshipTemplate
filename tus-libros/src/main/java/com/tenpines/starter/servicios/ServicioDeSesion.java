@@ -132,9 +132,7 @@ public class ServicioDeSesion {
 
 
     public List<VentaConcretada> mostrarVentasParaUnCliente(Long idUsuario, String password) {
-        servicioDeCliente.loguearCliente(idUsuario,password);
-        Sesion sesion = buscarSesionParaElCliente(idUsuario);
-        chequearSesionExpirada(sesion);
+        Cliente cliente = servicioDeCliente.clienteLogueado(idUsuario,password);
         List<Carrito> listaDeCarritos = buscarCarritosDelCliente(idUsuario);
         return servicioDeVentasConcretadas.mostrarVentasDeCarritos(listaDeCarritos);
     }
@@ -148,9 +146,9 @@ public class ServicioDeSesion {
 
     private Sesion buscarSesionParaElCliente(Long idUsuario) {
         try {
-            Sesion sesion = em.createQuery("select u from Sesion u where u.cliente.id = :id", Sesion.class).
-                    setParameter("id", idUsuario).getSingleResult();
-            return sesion;}
+            List<Sesion> sesion = em.createQuery("select u from Sesion u where u.cliente.id = :id", Sesion.class).
+                    setParameter("id", idUsuario).getResultList();
+            return sesion.get(sesion.size()-1);}
         catch (RuntimeException NoHaySesionParaElUsuarioIngresado) {
 
             throw new RuntimeException(mensajeDeErrorCuandoNoExisteSesionParaElUsuarioSeleccionado());
