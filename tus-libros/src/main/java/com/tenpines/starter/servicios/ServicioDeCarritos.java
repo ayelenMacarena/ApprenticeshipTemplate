@@ -54,9 +54,8 @@ public class ServicioDeCarritos {
 
 
     private void validarQueElLibroPertenezcaALaEditorial(Long libroId) {
-        List<Libro> catalogo = em.createQuery("select libro from Libro libro where libro.id = :id", Libro.class).
-                setParameter("id", libroId).getResultList();
-        if(catalogo.isEmpty()){
+        Libro unLibro = servicioDeCatalogo.darLibro(libroId);
+        if(unLibro == null){
             throw new RuntimeException(mensajeDeErrorCuandoElLibroNoExisteEnLaEditorial());
         }
     }

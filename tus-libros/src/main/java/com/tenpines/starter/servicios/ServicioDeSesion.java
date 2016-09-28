@@ -82,13 +82,14 @@ public class ServicioDeSesion {
 
     private Sesion buscarSesionParaElCarrito(Long carritoId) {
         try {
-        Sesion sesion = em.createQuery("select c from Sesion c where c.carrito.id = :id", Sesion.class).
-                setParameter("id", carritoId).getSingleResult();
-        return sesion;}
+            Sesion sesion = repositorio.getSesion(carritoId, em);
+            return sesion;}
         catch (RuntimeException NoExisteElCarrito) {
                 throw new RuntimeException(mensajeDeErrorCuandoNoExisteElCarritoQueQuiero());
              }
     }
+
+
 
     public void agregarLibro(Sesion sesion, Long idLibro, Integer cantidad) {
         chequearSesionExpirada(sesion);
@@ -145,16 +146,13 @@ public class ServicioDeSesion {
     }
 
     private List<Carrito> buscarCarritosDelCliente(Long idUsuario) {
-        List<Carrito> carritos = em.createQuery("select c.carrito from Sesion c where c.cliente.id = :id", Carrito.class).
-                setParameter("id", idUsuario).getResultList();
-        return carritos;
+        return repositorio.getCarritoDeUsuario(idUsuario, em);
     }
 
 
     private Sesion buscarSesionParaElCliente(Long idUsuario) {
         try {
-            List<Sesion> sesion = em.createQuery("select u from Sesion u where u.cliente.id = :id", Sesion.class).
-                    setParameter("id", idUsuario).getResultList();
+            List<Sesion> sesion = repositorio.getSesionParaCliente(idUsuario, em);
             return sesion.get(sesion.size()-1);}
         catch (RuntimeException NoHaySesionParaElUsuarioIngresado) {
 

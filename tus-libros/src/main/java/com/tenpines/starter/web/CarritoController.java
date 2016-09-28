@@ -55,37 +55,37 @@ public class CarritoController extends GlobalExceptionHandlingController{
     }
 
 
-    @RequestMapping(value = Endpoints.AGREGAR_CARRITO, method = RequestMethod.POST)
-    void crearUnCarrito(HttpServletResponse response) throws IOException {
+    @RequestMapping(value = Endpoints.AGREGAR_CARRITO, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    Carrito crearUnCarrito(HttpServletResponse response) throws IOException {
         sesion = servicioDeSesion.crearCarrito(unCliente);
         unCarrito = mostrarCarritoActual();
-        response.sendRedirect(Endpoints.HOME);
+        return unCarrito;
     }
 
-
-    @RequestMapping(value = Endpoints.AGREGAR_ITEM, method = RequestMethod.POST)
+    @RequestMapping(value = Endpoints.AGREGAR_ITEM, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     void agregarUnLibro(@RequestParam Map<String,String> requestParams, HttpServletResponse response) throws IOException {
         Long idLibro = Long.valueOf(requestParams.get("libro"));
         Integer cantidad = Integer.valueOf(requestParams.get("cantidad"));
-        itemsCarrito = servicioDeSesion.mostrarLibrosDeCarrito(sesion.getCarrito().getId());
         servicioDeSesion.agregarLibro(sesion,idLibro,cantidad);
-        response.sendRedirect(Endpoints.HOME);
+        itemsCarrito = servicioDeSesion.mostrarLibrosDeCarrito(sesion.getCarrito().getId());
+        response.sendRedirect("/listCart?" + "carrito=" + sesion.getCarrito().getId()); //TODO VER COMO SE HACE PARA USAR EL ENDPOINT Y PASARLE UN PARAMETRO
     }
 
     @RequestMapping(value=Endpoints.MOSTRAR_ITEMS, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    List<Libro> obtenerLibro(@RequestParam(value = "carrito") Long carritoId){
-        return servicioDeSesion.mostrarLibrosDeCarrito(carritoId);
+    List<Libro> obtenerLibro(@RequestParam(value = "carrito") Carrito unCarrito){
+        return servicioDeSesion.mostrarLibrosDeCarrito(unCarrito.getId());
     }
 
-    @RequestMapping(value = Endpoints.LOGUEAR_CLIENTE, method = RequestMethod.POST)
-    private void loguearCliente( @RequestParam Map<String,String> requestParams , HttpServletResponse response) throws IOException {
-
+    @RequestMapping(value = Endpoints.LOGUEAR_CLIENTE, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    private Cliente loguearCliente(@RequestParam Map<String,String> requestParams , HttpServletResponse response) throws IOException {
         Long idUsuario = Long.valueOf(requestParams.get("nombre"));
         String password = requestParams.get("password");
 
         unCliente = servicioDeCliente.clienteLogueado(idUsuario, password);
-        response.sendRedirect(Endpoints.HOME);
+        return unCliente;
     }
 
     @RequestMapping(value=Endpoints.OBTENER_CLIENTE, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -102,12 +102,11 @@ public class CarritoController extends GlobalExceptionHandlingController{
         return servicioDeSesion.mostrarVentasParaUnCliente(idUsuario, password);
     }
 
-
-    @RequestMapping(value=Endpoints.OBTENER_CARRITO, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ResponseBody
-    void obtenerCarritos(){
-        //return servicioDeSesion.mostrarCarritos();
-    }
+//    @RequestMapping(value=Endpoints.OBTENER_CARRITO, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+//    @ResponseBody
+//    void obtenerCarritos(){
+//        //return servicioDeSesion.mostrarCarritos();
+//    }
 
     @RequestMapping(value = Endpoints.COBRAR_CARRITO, method = RequestMethod.POST)
     void checkoutearCarrito(@RequestParam Map<String,String> requestParams, HttpServletResponse response) throws IOException {

@@ -12,7 +12,7 @@
         <h2>Nueva compra</h2>
         <br/>
 
-        <form action="/carrito_nuevo" method="post" >
+        <%--<form action="/carrito_nuevo" method="post" >--%>
             Crear nuevo carrito
             <input type="submit">
         </form>
@@ -31,7 +31,7 @@
         </form>
 
 
-        <form action="/loguearCliente" method="post" >
+        <%--<form action="/loguearCliente" method="get" >--%>
             Client Id
             <input name="nombre">
             Password
