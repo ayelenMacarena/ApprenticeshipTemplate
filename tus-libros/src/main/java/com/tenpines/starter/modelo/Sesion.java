@@ -25,17 +25,19 @@ public class Sesion {
     @Type(type="timestamp")
     private Timestamp ultimoUso;
 
-    public static Sesion crearSesion(Carrito carrito, Cliente unCliente) {
+    private Reloj reloj;
+
+    public static Sesion crearSesion(Carrito carrito, Cliente unCliente, Reloj unReloj) {
         if(unCliente == null){
             throw new RuntimeException(mensajeDeErrorCuandoQuieroCrearUnCarritoConUsuarioInvalido());
         }
         Sesion sesion = new Sesion();
         sesion.setCliente(unCliente);
         sesion.setCarrito(carrito);
-        sesion.setUltimoUso(Timestamp.valueOf(LocalDateTime.now()));
+        sesion.setUltimoUso(LocalDateTime.now());
+        sesion.setReloj(unReloj);
         return sesion;
     }
-
 
     public static String mensajeDeErrorCuandoQuieroCrearUnCarritoConUsuarioInvalido() {
         return "Para crear un carrito debe estar logueado con un usuario valido";
@@ -66,12 +68,22 @@ public class Sesion {
         return carrito;
     }
 
-    public void setUltimoUso(Timestamp ultimoUso) {
-        this.ultimoUso = ultimoUso;
+    public void setUltimoUso(LocalDateTime ultimoUso) {
+        Timestamp hora = Timestamp.valueOf(ultimoUso);
+        this.ultimoUso = hora;
     }
 
-    public Timestamp getUltimoUso() {
-        return ultimoUso;
+    public LocalDateTime getUltimoUso() {
+        LocalDateTime hora = ultimoUso.toLocalDateTime();
+        return hora;
+    }
+
+    public Reloj getReloj() {
+        return reloj;
+    }
+
+    public void setReloj(Reloj reloj) {
+        this.reloj = reloj;
     }
 
     public int treintaMinutosDeExpiracion(){
@@ -84,7 +96,7 @@ public class Sesion {
     }
 
     private long diferenciaDeTiempo() {
-        return Duration.between(this.getUltimoUso().toLocalDateTime(), LocalDateTime.now()).toMinutes();
+        return Duration.between(this.getUltimoUso(), reloj.horaActual()).toMinutes();
     }
 
     public void chequearSesionExpirada() {
@@ -97,6 +109,8 @@ public class Sesion {
         return "Su sesión está expirada";
     }
 
-
-
+    public void agregarLibroACarrito(Libro libro, Integer cantidad) {
+        chequearSesionExpirada();
+        carrito.agregarLibro(libro,cantidad);
+    }
 }
