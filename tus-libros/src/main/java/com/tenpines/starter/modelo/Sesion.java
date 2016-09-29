@@ -32,7 +32,7 @@ public class Sesion {
         Sesion sesion = new Sesion();
         sesion.setCliente(unCliente);
         sesion.setCarrito(carrito);
-        sesion.setUltimoUso(Timestamp.valueOf(LocalDateTime.now()));
+        sesion.setUltimoUso(LocalDateTime.now());
         return sesion;
     }
 
@@ -66,12 +66,14 @@ public class Sesion {
         return carrito;
     }
 
-    public void setUltimoUso(Timestamp ultimoUso) {
-        this.ultimoUso = ultimoUso;
+    public void setUltimoUso(LocalDateTime ultimoUso) {
+        Timestamp hora = Timestamp.valueOf(ultimoUso);
+        this.ultimoUso = hora;
     }
 
-    public Timestamp getUltimoUso() {
-        return ultimoUso;
+    public LocalDateTime getUltimoUso() {
+        LocalDateTime hora = ultimoUso.toLocalDateTime();
+        return hora;
     }
 
     public int treintaMinutosDeExpiracion(){
@@ -84,7 +86,7 @@ public class Sesion {
     }
 
     private long diferenciaDeTiempo() {
-        return Duration.between(this.getUltimoUso().toLocalDateTime(), LocalDateTime.now()).toMinutes();
+        return Duration.between(this.getUltimoUso(), LocalDateTime.now()).toMinutes();
     }
 
     public void chequearSesionExpirada() {

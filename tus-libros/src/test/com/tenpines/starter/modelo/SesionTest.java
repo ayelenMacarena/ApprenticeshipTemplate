@@ -6,9 +6,7 @@ import org.junit.Test;
 import static junit.framework.TestCase.assertTrue;
 import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * Created by Aye on 29/09/16.
- */
+
 public class SesionTest {
 
     Cliente cliente ;
