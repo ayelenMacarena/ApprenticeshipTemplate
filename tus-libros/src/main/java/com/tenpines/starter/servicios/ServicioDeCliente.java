@@ -16,7 +16,7 @@ public class ServicioDeCliente {
     private RepositorioDeClientes repo;
 
     @Transactional
-    public void almacenar(Cliente cliente) {
+    public void guardarCliente(Cliente cliente) {
         repo.save(cliente);
     }
 

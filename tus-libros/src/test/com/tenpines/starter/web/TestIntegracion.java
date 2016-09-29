@@ -45,7 +45,7 @@ public class TestIntegracion extends SpringTestBase {
             Sesion sesion = servicioDeSesion.crearCarrito(cliente);
             assertTrue("nunca deberia llegar aca", false);
         } catch (RuntimeException excepcionDeCarritoSinUsuario) {
-            AssertionsForClassTypes.assertThat(excepcionDeCarritoSinUsuario.getMessage()).isEqualTo(ServicioDeSesion.mensajeDeErrorCuandoQuieroCrearUnCarritoConUsuarioInvalido());
+            AssertionsForClassTypes.assertThat(excepcionDeCarritoSinUsuario.getMessage()).isEqualTo(Sesion.mensajeDeErrorCuandoQuieroCrearUnCarritoConUsuarioInvalido());
         }
     }
 
@@ -57,7 +57,7 @@ public class TestIntegracion extends SpringTestBase {
     @Test
     public void agregarUnItemAUnCarritoYQueLoContenga() throws Exception {
         Cliente cliente = Cliente.crearCliente("1234");
-        servicioDeCliente.almacenar(cliente);
+        servicioDeCliente.guardarCliente(cliente);
         Sesion sesion = servicioDeSesion.crearCarrito(cliente);
         Carrito carrito = sesion.getCarrito();
         Libro libro = servicioDeCatalogo.agregarLibroAlCatalogo("Guerra de los mundos", "123456789", 45);
@@ -70,7 +70,7 @@ public class TestIntegracion extends SpringTestBase {
     @Test
     public void agrego2ItemsAUncarritoYEstanYlugegoAgrego2MasDelMismoDebeHaber4() throws Exception {
         Cliente cliente = Cliente.crearCliente("1234");
-        servicioDeCliente.almacenar(cliente);
+        servicioDeCliente.guardarCliente(cliente);
         Sesion sesion = servicioDeSesion.crearCarrito(cliente);
         Carrito carrito = sesion.getCarrito();
         Libro libro = servicioDeCatalogo.agregarLibroAlCatalogo("Guerra de los mundos", "123456789", 45);
@@ -92,7 +92,7 @@ public class TestIntegracion extends SpringTestBase {
     @Test
     public void alQuererAgregarUnItemConUnaSesionExpiradaDebeLanzarUnExcepcionYNoAgregarElItem(){
         Cliente cliente = Cliente.crearCliente("1234");
-        servicioDeCliente.almacenar(cliente);
+        servicioDeCliente.guardarCliente(cliente);
         Sesion sesionExpirada = servicioDeSesion.crearCarrito(cliente);
         Carrito carrito = sesionExpirada.getCarrito();
         Libro libro = servicioDeCatalogo.agregarLibroAlCatalogo("Guerra de los mundos", "123456789", 45);
@@ -103,14 +103,14 @@ public class TestIntegracion extends SpringTestBase {
         try {servicioDeSesion.agregarLibro(sesionExpirada, libro.getId(), 1);
             TestCase.assertTrue("nunca deberia llegar aca", false);
         } catch (RuntimeException excepcionDeSesionExpirada) {
-            assertThat(excepcionDeSesionExpirada.getMessage()).isEqualTo(ServicioDeSesion.mensajeDeErrorSesionExpirada());
+            assertThat(excepcionDeSesionExpirada.getMessage()).isEqualTo(Sesion.mensajeDeErrorSesionExpirada());
         }
     }
 
     @Test
     public void agrego3ItemsAUncarritoYEstanYlugegoAgrego2MasDeOtroMismoYEstanYElTotalEs5() throws Exception {
         Cliente cliente = Cliente.crearCliente("1234");
-        servicioDeCliente.almacenar(cliente);
+        servicioDeCliente.guardarCliente(cliente);
         Sesion sesion = servicioDeSesion.crearCarrito(cliente);
         Carrito carrito = sesion.getCarrito();
         Libro libro = servicioDeCatalogo.agregarLibroAlCatalogo("Guerra de los mundos", "123456789", 45);

@@ -35,39 +35,16 @@ public class ServicioDeSesion {
     private ServicioDeVentasConcretadas servicioDeVentasConcretadas;
 
     public Sesion crearCarrito(Cliente unCliente) {
-        if(unCliente == null){
-            throw new RuntimeException(mensajeDeErrorCuandoQuieroCrearUnCarritoConUsuarioInvalido());
-        }
         Carrito carrito = servicioDeCarritos.nuevoCarrito();
         Sesion nuevaSesion = Sesion.crearSesion(carrito,unCliente);
-
         repositorio.save(nuevaSesion);
         return nuevaSesion;
     }
 
-
-    public static String mensajeDeErrorCuandoQuieroCrearUnCarritoConUsuarioInvalido() {
-        return "Para crear un carrito debe estar logueado con un usuario valido";
-    }
-
-    public List<Carrito> mostrarCarritos() {
-        return servicioDeCarritos.mostrarCarritos();
-    }
-
     public List<Libro> mostrarLibrosDeCarrito(Long carritoId) {
         Sesion laSesion = buscarSesionParaElCarrito(carritoId);
-        if (laSesion == null){
-            throw new RuntimeException(mensajeDeErrorCuandoNoExisteElCarritoQueQuiero());
-        }
-        chequearSesionExpirada(laSesion);
-
-        actualizarUltimoUsoDeSesion(laSesion);
+        chequearSesionExpiradaYActulizarUltimoUso(laSesion);
         return servicioDeCarritos.mostrarLibrosDeCarrito(laSesion.getCarrito().getId());
-    }
-
-    private boolean laSesionExpiro(Sesion laSesion) {
-        long periodoDeTiempo = Duration.between(laSesion.getUltimoUso().toLocalDateTime(), LocalDateTime.now()).toMinutes();
-        return periodoDeTiempo > 30;
     }
 
     private void actualizarUltimoUsoDeSesion(Sesion sesion) {
@@ -76,7 +53,7 @@ public class ServicioDeSesion {
     }
 
 
-    public static String mensajeDeErrorCuandoNoExisteElCarritoQueQuiero() {
+    private static String mensajeDeErrorCuandoNoExisteElCarritoQueQuiero() {
         return "No existe el carrito del que quiere ver el contenido";
     }
 
@@ -92,47 +69,27 @@ public class ServicioDeSesion {
 
 
     public void agregarLibro(Sesion sesion, Long idLibro, Integer cantidad) {
-        chequearSesionExpirada(sesion);
-
-        actualizarUltimoUsoDeSesion(sesion);
+        chequearSesionExpiradaYActulizarUltimoUso(sesion);
         servicioDeCarritos.agregarLibro(sesion.getCarrito(),idLibro,cantidad);
     }
 
-    private void chequearSesionExpirada(Sesion laSesion) {
-        if(laSesionExpiro(laSesion)){
-            throw new RuntimeException(mensajeDeErrorSesionExpirada());
-        }
+    private void chequearSesionExpiradaYActulizarUltimoUso(Sesion sesion) {
+        sesion.chequearSesionExpirada();
+        actualizarUltimoUsoDeSesion(sesion);
     }
 
     public List<Libro> obtenerUnCarrito(Long id){
         Sesion sesion = buscarSesionParaElCarrito(id);
-        chequearSesionExpirada(sesion);
+        chequearSesionExpiradaYActulizarUltimoUso(sesion);
         return servicioDeCarritos.mostrarLibrosDeCarrito(id);
-    }
-
-    public static String mensajeDeErrorSesionExpirada() {
-        return "Su sesión está expirada";
     }
 
     public void cobrarCarrito(Long carritoId, String nombreDeDuenio,Long numeroDeTarjeta, LocalDate fechaDeExpiracion) {
         Sesion sesion = buscarSesionParaElCarrito(carritoId);
-        chequearSesionExpirada(sesion);
+        chequearSesionExpiradaYActulizarUltimoUso(sesion);
         Carrito carrito = servicioDeCarritos.buscarElCarrito(carritoId);
         TarjetaDeCredito tarjetaValidada = TarjetaDeCredito.nuevaTarjeta(numeroDeTarjeta, fechaDeExpiracion, nombreDeDuenio);
-        verificarQueNoSeCobroElCarrito(carritoId);
-
-        Cajero cajero = new Cajero();
-
-        VentaConcretada ventaConcretada = cajero.cobrar(carrito, tarjetaValidada);
-        servicioDeVentasConcretadas.registrarVenta(ventaConcretada);
-    }
-
-    private void verificarQueNoSeCobroElCarrito(Long carritoId) {
-        List<VentaConcretada> unaVenta = em.createQuery("select c from VentaConcretada c where c.carrito.id = :id", VentaConcretada.class).
-                    setParameter("id", carritoId).getResultList();
-        if(!unaVenta.isEmpty()){
-            throw new RuntimeException(mensajeDeErrorCuandoYaSeFacturoElCarrito());
-        }
+        servicioDeVentasConcretadas.concretarVenta(carrito, tarjetaValidada);
     }
 
     public List<VentaConcretada> mostrarVentasParaUnCliente(Long idUsuario, String password) {
@@ -141,29 +98,25 @@ public class ServicioDeSesion {
         return servicioDeVentasConcretadas.mostrarVentasDeCarritos(listaDeCarritos);
     }
 
-    private String mensajeDeErrorCuandoYaSeFacturoElCarrito() {
-        return "El carrito que quiere cobrar ya se facturó";
-    }
-
     private List<Carrito> buscarCarritosDelCliente(Long idUsuario) {
         return repositorio.getCarritoDeUsuario(idUsuario, em);
     }
 
-
-    private Sesion buscarSesionParaElCliente(Long idUsuario) {
-        try {
-            List<Sesion> sesion = repositorio.getSesionParaCliente(idUsuario, em);
-            return sesion.get(sesion.size()-1);}
-        catch (RuntimeException NoHaySesionParaElUsuarioIngresado) {
-
-            throw new RuntimeException(mensajeDeErrorCuandoNoExisteSesionParaElUsuarioSeleccionado());
-        }
-
-    }
-
-    private static String mensajeDeErrorCuandoNoExisteSesionParaElUsuarioSeleccionado() {
-        return "No existe sesión para el cliente ingresado";
-    }
+//      Lo comento porque sé que en algún momento sirvió.
+//    private Sesion buscarSesionParaElCliente(Long idUsuario) {
+//        try {
+//            List<Sesion> sesion = repositorio.getSesionParaCliente(idUsuario, em);
+//            return sesion.get(sesion.size()-1);}
+//        catch (RuntimeException NoHaySesionParaElUsuarioIngresado) {
+//
+//            throw new RuntimeException(mensajeDeErrorCuandoNoExisteSesionParaElUsuarioSeleccionado());
+//        }
+//
+//    }
+//
+//    private static String mensajeDeErrorCuandoNoExisteSesionParaElUsuarioSeleccionado() {
+//        return "No existe sesión para el cliente ingresado";
+//    }
 
 }
 

@@ -1,7 +1,9 @@
 package com.tenpines.starter.servicios;
 
 
+import com.tenpines.starter.modelo.Cajero;
 import com.tenpines.starter.modelo.Carrito;
+import com.tenpines.starter.modelo.TarjetaDeCredito;
 import com.tenpines.starter.modelo.VentaConcretada;
 import com.tenpines.starter.repositorios.RepositorioDeVentasConcretadas;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +30,10 @@ public class ServicioDeVentasConcretadas {
 
         repo.save(unaVenta);
     }
-        public void verificarQueNoSeHayaVendidoYaElCarrito(Long carritoId) {
-            List<VentaConcretada> unaVenta = getVentaConcretadasParaUnCarrito(carritoId).getResultList();
-            if(!unaVenta.isEmpty()){
+
+    public void verificarQueNoSeHayaVendidoYaElCarrito(Long carritoId) {
+        List<VentaConcretada> unaVenta = getVentaConcretadasParaUnCarrito(carritoId).getResultList();
+        if(!unaVenta.isEmpty()){
             throw new RuntimeException(mensajeDeErrorCuandoYaSeFacturoElCarrito());
         }
     }
@@ -55,5 +58,21 @@ public class ServicioDeVentasConcretadas {
         }
 
         return listaDeVentas;
+    }
+
+    public void verificarQueNoSeHayaVendido(Long carritoId) {
+        List<VentaConcretada> unaVenta = repo.getVentasParaElCarrito(carritoId, em);
+        if (!unaVenta.isEmpty()) {
+            throw new RuntimeException(mensajeDeErrorCuandoYaSeFacturoElCarrito());
+
+        }
+    }
+
+    public void concretarVenta(Carrito carrito, TarjetaDeCredito tarjetaValidada){
+        verificarQueNoSeHayaVendido(carrito.getId());
+        Cajero cajero = new Cajero();
+        VentaConcretada ventaConcretada = cajero.cobrar(carrito, tarjetaValidada);
+        registrarVenta(ventaConcretada);
+
     }
 }
