@@ -47,7 +47,6 @@ public class ServicioDeCarritos {
     public void agregarLibro(Carrito unCarrito, Long unLibro, Integer cantidad){
         validarQueElLibroPertenezcaALaEditorial(unLibro);
         Libro miLibroAAgregar = servicioDeCatalogo.darLibro(unLibro);
-        unCarrito.getItems().removeAll(unCarrito.getItems());
         unCarrito.agregarLibro(miLibroAAgregar,cantidad);
         almacenar(unCarrito);
     }

@@ -102,11 +102,6 @@ public class CarritoController extends GlobalExceptionHandlingController{
         return servicioDeSesion.mostrarVentasParaUnCliente(idUsuario, password);
     }
 
-//    @RequestMapping(value=Endpoints.OBTENER_CARRITO, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-//    @ResponseBody
-//    void obtenerCarritos(){
-//        //return servicioDeSesion.mostrarCarritos();
-//    }
 
     @RequestMapping(value = Endpoints.COBRAR_CARRITO, method = RequestMethod.POST)
     void checkoutearCarrito(@RequestParam Map<String,String> requestParams, HttpServletResponse response) throws IOException {

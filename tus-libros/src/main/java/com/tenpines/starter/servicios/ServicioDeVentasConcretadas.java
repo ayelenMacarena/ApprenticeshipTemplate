@@ -22,26 +22,12 @@ public class ServicioDeVentasConcretadas {
     @Autowired
     private RepositorioDeVentasConcretadas repo;
 
-    @Autowired
-    private EntityManager em;
-
     @Transactional
     public void registrarVenta(VentaConcretada unaVenta){
 
         repo.save(unaVenta);
     }
 
-    public void verificarQueNoSeHayaVendidoYaElCarrito(Long carritoId) {
-        List<VentaConcretada> unaVenta = getVentaConcretadasParaUnCarrito(carritoId).getResultList();
-        if(!unaVenta.isEmpty()){
-            throw new RuntimeException(mensajeDeErrorCuandoYaSeFacturoElCarrito());
-        }
-    }
-
-    private TypedQuery<VentaConcretada> getVentaConcretadasParaUnCarrito(Long carritoId) {
-        return em.createQuery("select c from VentaConcretada c where c.carrito.id = :id", VentaConcretada.class).
-                        setParameter("id", carritoId);
-    }
 
     private static String mensajeDeErrorCuandoYaSeFacturoElCarrito() {
         return "El carrito que quiere cobrar ya se facturó";
@@ -51,7 +37,7 @@ public class ServicioDeVentasConcretadas {
         List<VentaConcretada> listaDeVentas = new ArrayList<>();
         for (int i=0; i<listaDeCarritos.size(); i++) {
             Carrito carrito = listaDeCarritos.get(i);
-            List<VentaConcretada> venta = getVentaConcretadasParaUnCarrito(carrito.getId()).getResultList();
+            List<VentaConcretada> venta = repo.getVentasParaElCarrito(carrito.getId());
             if(!venta.isEmpty()){
             listaDeVentas.add(venta.get(0));}
 
@@ -61,7 +47,7 @@ public class ServicioDeVentasConcretadas {
     }
 
     public void verificarQueNoSeHayaVendido(Long carritoId) {
-        List<VentaConcretada> unaVenta = repo.getVentasParaElCarrito(carritoId, em);
+        List<VentaConcretada> unaVenta = repo.getVentasParaElCarrito(carritoId);
         if (!unaVenta.isEmpty()) {
             throw new RuntimeException(mensajeDeErrorCuandoYaSeFacturoElCarrito());
 

@@ -29,9 +29,6 @@ public class ServicioDeSesion {
     private RepositorioDeSesiones repositorio;
 
     @Autowired
-    private EntityManager em;
-
-    @Autowired
     private ServicioDeVentasConcretadas servicioDeVentasConcretadas;
 
     public Sesion crearCarrito(Cliente unCliente) {
@@ -59,13 +56,12 @@ public class ServicioDeSesion {
 
     private Sesion buscarSesionParaElCarrito(Long carritoId) {
         try {
-            Sesion sesion = repositorio.getSesion(carritoId, em);
+            Sesion sesion = repositorio.getSesion(carritoId);
             return sesion;}
         catch (RuntimeException NoExisteElCarrito) {
                 throw new RuntimeException(mensajeDeErrorCuandoNoExisteElCarritoQueQuiero());
              }
     }
-
 
 
     public void agregarLibro(Sesion sesion, Long idLibro, Integer cantidad) {
@@ -99,7 +95,7 @@ public class ServicioDeSesion {
     }
 
     private List<Carrito> buscarCarritosDelCliente(Long idUsuario) {
-        return repositorio.getCarritoDeUsuario(idUsuario, em);
+        return repositorio.getCarritoDeUsuario(idUsuario);
     }
 
 //      Lo comento porque sé que en algún momento sirvió.
