@@ -24,7 +24,6 @@ public class ServicioDeVentasConcretadas {
 
     @Transactional
     public void registrarVenta(VentaConcretada unaVenta){
-
         repo.save(unaVenta);
     }
 
@@ -42,7 +41,6 @@ public class ServicioDeVentasConcretadas {
             listaDeVentas.add(venta.get(0));}
 
         }
-
         return listaDeVentas;
     }
 
@@ -59,6 +57,5 @@ public class ServicioDeVentasConcretadas {
         Cajero cajero = new Cajero();
         VentaConcretada ventaConcretada = cajero.cobrar(carrito, tarjetaValidada);
         registrarVenta(ventaConcretada);
-
     }
 }

@@ -3,7 +3,7 @@ package com.tenpines.starter.web.TransferObjects;
 /**
  * Created by Aye on 29/09/16.
  */
-public class UsuarioPassword {
+public class UsuarioPasswordTO {
 
     public Long idUsuario;
     public String password;
@@ -22,6 +22,11 @@ public class UsuarioPassword {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public UsuarioPasswordTO(Long idUsuario, String password){
+        setIdUsuario(idUsuario);
+        setPassword(password);
     }
 
 }

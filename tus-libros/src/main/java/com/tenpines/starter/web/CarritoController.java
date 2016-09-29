@@ -4,6 +4,7 @@ import com.tenpines.starter.modelo.*;
 import com.tenpines.starter.servicios.ServicioDeCatalogo;
 import com.tenpines.starter.servicios.ServicioDeCliente;
 import com.tenpines.starter.servicios.ServicioDeSesion;
+import com.tenpines.starter.web.TransferObjects.UsuarioPasswordTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -96,10 +97,13 @@ public class CarritoController extends GlobalExceptionHandlingController{
 
     @RequestMapping(value=Endpoints.LISTAR_VENTAS, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    List<VentaConcretada> obtenerVentasParaUnCliente(@RequestParam Map<String,String> params){
-        Long idUsuario = Long.valueOf(params.get("nombre"));
-        String password = params.get("password");
-        return servicioDeSesion.mostrarVentasParaUnCliente(idUsuario, password);
+    List<VentaConcretada> obtenerVentasParaUnCliente(@RequestParam(value = "usuario") UsuarioPasswordTO usuarioPasswordTO){
+        Cliente cliente = getCliente(usuarioPasswordTO.getIdUsuario());
+        return servicioDeSesion.mostrarVentasParaUnCliente(cliente, usuarioPasswordTO.getPassword());
+    }
+
+    private Cliente getCliente(Long unId) {
+        return servicioDeCliente.buscarElCliente(unId);
     }
 
 

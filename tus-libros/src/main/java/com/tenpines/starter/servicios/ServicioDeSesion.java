@@ -88,15 +88,12 @@ public class ServicioDeSesion {
         servicioDeVentasConcretadas.concretarVenta(carrito, tarjetaValidada);
     }
 
-    public List<VentaConcretada> mostrarVentasParaUnCliente(Long idUsuario, String password) {
-        Cliente cliente = servicioDeCliente.clienteLogueado(idUsuario,password);
-        List<Carrito> listaDeCarritos = buscarCarritosDelCliente(idUsuario);
+    public List<VentaConcretada> mostrarVentasParaUnCliente(Cliente cliente, String password) {
+        servicioDeCliente.loguearCliente(cliente.getId(), password);
+        List<Carrito> listaDeCarritos = repositorio.getCarritoDeUsuario(cliente.getId());
         return servicioDeVentasConcretadas.mostrarVentasDeCarritos(listaDeCarritos);
     }
 
-    private List<Carrito> buscarCarritosDelCliente(Long idUsuario) {
-        return repositorio.getCarritoDeUsuario(idUsuario);
-    }
 
 //      Lo comento porque sé que en algún momento sirvió.
 //    private Sesion buscarSesionParaElCliente(Long idUsuario) {
