@@ -98,7 +98,7 @@ public class TestIntegracion extends SpringTestBase {
         Libro libro = servicioDeCatalogo.agregarLibroAlCatalogo("Guerra de los mundos", "123456789", 45);
 
         LocalDateTime relojDeTest = LocalDateTime.now();
-        sesionExpirada.setUltimoUso(Timestamp.valueOf(relojDeTest.minusMinutes(31)));
+        sesionExpirada.setUltimoUso(relojDeTest.minusMinutes(31));
 
         try {servicioDeSesion.agregarLibro(sesionExpirada, libro.getId(), 1);
             TestCase.assertTrue("nunca deberia llegar aca", false);

@@ -13,8 +13,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-
-
 @Service
 @Transactional
 public class ServicioDeSesion {
@@ -31,9 +29,12 @@ public class ServicioDeSesion {
     @Autowired
     private ServicioDeVentasConcretadas servicioDeVentasConcretadas;
 
+    @Autowired
+    private Reloj reloj;
+
     public Sesion crearCarrito(Cliente unCliente) {
         Carrito carrito = servicioDeCarritos.nuevoCarrito();
-        Sesion nuevaSesion = Sesion.crearSesion(carrito,unCliente);
+        Sesion nuevaSesion = Sesion.crearSesion(carrito,unCliente, reloj);
         repositorio.save(nuevaSesion);
         return nuevaSesion;
     }
@@ -45,10 +46,9 @@ public class ServicioDeSesion {
     }
 
     private void actualizarUltimoUsoDeSesion(Sesion sesion) {
-        sesion.setUltimoUso(Timestamp.valueOf(LocalDateTime.now()));
+        sesion.setUltimoUso(LocalDateTime.now());
         repositorio.save(sesion);
     }
-
 
     private static String mensajeDeErrorCuandoNoExisteElCarritoQueQuiero() {
         return "No existe el carrito del que quiere ver el contenido";
@@ -62,7 +62,6 @@ public class ServicioDeSesion {
                 throw new RuntimeException(mensajeDeErrorCuandoNoExisteElCarritoQueQuiero());
              }
     }
-
 
     public void agregarLibro(Sesion sesion, Long idLibro, Integer cantidad) {
         chequearSesionExpiradaYActulizarUltimoUso(sesion);

@@ -1,16 +1,28 @@
 package com.tenpines.starter.modelo;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Reloj {
 
-    private final LocalDate horaActual;
+    LocalDateTime horaActual;
 
-    public Reloj(){
-        horaActual = LocalDate.now();
+    public Reloj(Integer hora, Integer minutos) {
+       horaActual = LocalDateTime.now().withHour(hora).withMinute(minutos);
     }
 
-    public LocalDate horaActual(){
+    public LocalDateTime horaActual(){
         return horaActual;
+    }
+
+    public Integer obtenerHora() {
+        return horaActual.getHour();
+    }
+
+    public Integer obtenerMinutos() {
+        return horaActual.getMinute();
+    }
+
+    public void setearHoraYMinutos(Integer hora, Integer minutos){
+        horaActual = horaActual.withHour(hora).withMinute(minutos);
     }
 }

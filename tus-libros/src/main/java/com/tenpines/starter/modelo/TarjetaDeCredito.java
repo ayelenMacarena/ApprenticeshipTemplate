@@ -2,10 +2,12 @@ package com.tenpines.starter.modelo;
 
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.chrono.ChronoLocalDate;
 
 public class TarjetaDeCredito {
 
-    private static Reloj reloj = new Reloj();
+    private static Reloj reloj = new Reloj(LocalDateTime.now().getHour(),LocalDateTime.now().getMinute());
 
     public Long numero;
     public LocalDate fechaDeExpiracion;
@@ -55,7 +57,7 @@ public class TarjetaDeCredito {
     }
 
     private static void validadTarjetaNoExpirada(LocalDate fechaDeExpiracion){
-        if (fechaDeExpiracion.isBefore(reloj.horaActual())){
+        if (fechaDeExpiracion.isBefore(ChronoLocalDate.from(reloj.horaActual()))){
             throw new RuntimeException(mensajeDeErrorCuandoLaTarjetaEstaExpirada());
         }
     }

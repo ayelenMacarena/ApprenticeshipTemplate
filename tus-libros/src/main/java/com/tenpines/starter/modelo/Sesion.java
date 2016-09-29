@@ -25,7 +25,9 @@ public class Sesion {
     @Type(type="timestamp")
     private Timestamp ultimoUso;
 
-    public static Sesion crearSesion(Carrito carrito, Cliente unCliente) {
+    private Reloj reloj;
+
+    public static Sesion crearSesion(Carrito carrito, Cliente unCliente, Reloj unReloj) {
         if(unCliente == null){
             throw new RuntimeException(mensajeDeErrorCuandoQuieroCrearUnCarritoConUsuarioInvalido());
         }
@@ -33,9 +35,9 @@ public class Sesion {
         sesion.setCliente(unCliente);
         sesion.setCarrito(carrito);
         sesion.setUltimoUso(LocalDateTime.now());
+        sesion.setReloj(unReloj);
         return sesion;
     }
-
 
     public static String mensajeDeErrorCuandoQuieroCrearUnCarritoConUsuarioInvalido() {
         return "Para crear un carrito debe estar logueado con un usuario valido";
@@ -76,6 +78,14 @@ public class Sesion {
         return hora;
     }
 
+    public Reloj getReloj() {
+        return reloj;
+    }
+
+    public void setReloj(Reloj reloj) {
+        this.reloj = reloj;
+    }
+
     public int treintaMinutosDeExpiracion(){
         return 30;
     }
@@ -86,7 +96,7 @@ public class Sesion {
     }
 
     private long diferenciaDeTiempo() {
-        return Duration.between(this.getUltimoUso(), LocalDateTime.now()).toMinutes();
+        return Duration.between(this.getUltimoUso(), reloj.horaActual()).toMinutes();
     }
 
     public void chequearSesionExpirada() {
@@ -99,6 +109,8 @@ public class Sesion {
         return "Su sesión está expirada";
     }
 
-
-
+    public void agregarLibroACarrito(Libro libro, Integer cantidad) {
+        chequearSesionExpirada();
+        carrito.agregarLibro(libro,cantidad);
+    }
 }
