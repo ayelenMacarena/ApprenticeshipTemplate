@@ -1,5 +1,6 @@
 package com.tenpines.starter.modelo;
 
+import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
@@ -25,9 +26,8 @@ public class Sesion {
     @Type(type="timestamp")
     private Timestamp ultimoUso;
 
-    private Reloj reloj;
 
-    public static Sesion crearSesion(Carrito carrito, Cliente unCliente, Reloj unReloj) {
+    public static Sesion crearSesion(Carrito carrito, Cliente unCliente) {
         if(unCliente == null){
             throw new RuntimeException(mensajeDeErrorCuandoQuieroCrearUnCarritoConUsuarioInvalido());
         }
@@ -35,7 +35,6 @@ public class Sesion {
         sesion.setCliente(unCliente);
         sesion.setCarrito(carrito);
         sesion.setUltimoUso(LocalDateTime.now());
-        sesion.setReloj(unReloj);
         return sesion;
     }
 
@@ -78,29 +77,22 @@ public class Sesion {
         return hora;
     }
 
-    public Reloj getReloj() {
-        return reloj;
-    }
-
-    public void setReloj(Reloj reloj) {
-        this.reloj = reloj;
-    }
 
     public int treintaMinutosDeExpiracion(){
         return 30;
     }
 
-    public boolean laSesionExpiro() {
-        //TODO: ver usar reloj en lo que está trabajando Kevin.
-        return diferenciaDeTiempo() > treintaMinutosDeExpiracion();
+
+    public boolean laSesionExpiro(RelojDePrueba reloj) {
+        return diferenciaDeTiempo(reloj) > treintaMinutosDeExpiracion();
     }
 
-    private long diferenciaDeTiempo() {
+    private long diferenciaDeTiempo(RelojDePrueba reloj) {
         return Duration.between(this.getUltimoUso(), reloj.horaActual()).toMinutes();
     }
 
-    public void chequearSesionExpirada() {
-        if(this.laSesionExpiro()){
+    public void chequearSesionExpirada(RelojDePrueba reloj) {
+        if(this.laSesionExpiro(reloj)){
             throw new RuntimeException(mensajeDeErrorSesionExpirada());
         }
     }
@@ -109,8 +101,8 @@ public class Sesion {
         return "Su sesión está expirada";
     }
 
-    public void agregarLibroACarrito(Libro libro, Integer cantidad) {
-        chequearSesionExpirada();
+    public void agregarLibroACarrito(Libro libro, Integer cantidad, RelojDePrueba reloj) {
+        chequearSesionExpirada(reloj);
         carrito.agregarLibro(libro,cantidad);
     }
 }

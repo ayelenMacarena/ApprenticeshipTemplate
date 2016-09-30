@@ -7,7 +7,7 @@ import java.time.chrono.ChronoLocalDate;
 
 public class TarjetaDeCredito {
 
-    private static Reloj reloj = new Reloj(LocalDateTime.now().getHour(),LocalDateTime.now().getMinute());
+    private static RelojDePrueba reloj = new RelojDePrueba(LocalDateTime.now().getHour(),LocalDateTime.now().getMinute());
 
     public Long numero;
     public LocalDate fechaDeExpiracion;

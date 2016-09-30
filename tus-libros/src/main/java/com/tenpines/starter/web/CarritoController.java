@@ -9,10 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -97,7 +94,7 @@ public class CarritoController extends GlobalExceptionHandlingController{
 
     @RequestMapping(value=Endpoints.LISTAR_VENTAS, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    List<VentaConcretada> obtenerVentasParaUnCliente(@RequestParam(value = "usuario") UsuarioPasswordTO usuarioPasswordTO){
+    List<VentaConcretada> obtenerVentasParaUnCliente(@ModelAttribute("usuario") UsuarioPasswordTO usuarioPasswordTO){
         Cliente cliente = getCliente(usuarioPasswordTO.getIdUsuario());
         return servicioDeSesion.mostrarVentasParaUnCliente(cliente, usuarioPasswordTO.getPassword());
     }

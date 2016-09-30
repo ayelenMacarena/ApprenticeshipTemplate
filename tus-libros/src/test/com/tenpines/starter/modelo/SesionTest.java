@@ -12,13 +12,13 @@ public class SesionTest {
     Carrito carrito = Carrito.crearCarrito();
     Cliente clienteNull;
     Carrito carritoNull;
-    Reloj reloj = new Reloj(12,30);
-    Sesion sesion = Sesion.crearSesion(carrito,cliente,reloj);
+    RelojDePrueba reloj = new RelojDePrueba(12,30);
+    Sesion sesion = Sesion.crearSesion(carrito,cliente);
     Libro libro = Libro.crearLibro("el principito", "123123123", 45);
 
     @Test
     public void tratoDeCrearUnaSesionConUnClienteEnNullYMeTiraUnaExcepcion(){
-        try {Sesion.crearSesion(carrito,clienteNull,reloj);
+        try {Sesion.crearSesion(carrito,clienteNull);
         } catch (RuntimeException excepcionNoCrearSesionSinCliente) {
             assertThat(excepcionNoCrearSesionSinCliente.getMessage()).isEqualTo(Sesion.mensajeDeErrorCuandoQuieroCrearUnCarritoConUsuarioInvalido());
         }
@@ -27,11 +27,11 @@ public class SesionTest {
     @Test
     public void unaSesionSeVenceAlPasarMasDe30Minutos(){
         reloj.setearHoraYMinutos(10,0);
-        Sesion sesion = Sesion.crearSesion(carrito,cliente,reloj);
+        Sesion sesion = Sesion.crearSesion(carrito,cliente);
         sesion.setUltimoUso(reloj.horaActual());
         reloj.setearHoraYMinutos(10,40);
 
-        try {sesion.chequearSesionExpirada();
+        try {sesion.chequearSesionExpirada(reloj);
             assertTrue("nunca deberia llegar aca", false);
         } catch (RuntimeException excepcionSesionExpirada) {
             assertThat(excepcionSesionExpirada.getMessage()).isEqualTo(Sesion.mensajeDeErrorSesionExpirada());
@@ -41,19 +41,19 @@ public class SesionTest {
     @Test
     public void unaSesionSeVenceAlPasar30MinutosTodaviaNoExpiro() {
         reloj.setearHoraYMinutos(10, 0);
-        Sesion sesion = Sesion.crearSesion(carrito, cliente, reloj);
+        Sesion sesion = Sesion.crearSesion(carrito, cliente);
         sesion.setUltimoUso(reloj.horaActual());
         reloj.setearHoraYMinutos(10, 30);
-        assertThat(sesion.laSesionExpiro()).isFalse();
+        assertThat(sesion.laSesionExpiro(reloj)).isFalse();
     }
 
     @Test
     public void noSePuedeAgregarUnLibroAUnCarritoDeUnaSesionExpiro() {
         reloj.setearHoraYMinutos(10,0);
-        Sesion sesion = Sesion.crearSesion(carrito,cliente,reloj);
+        Sesion sesion = Sesion.crearSesion(carrito,cliente);
         sesion.setUltimoUso(reloj.horaActual());
         reloj.setearHoraYMinutos(10,40);
-        try {sesion.agregarLibroACarrito(libro, 1);
+        try {sesion.agregarLibroACarrito(libro, 1, reloj);
             assertTrue("nunca deberia llegar aca", false);
         } catch (RuntimeException excepcionSesionExpirada) {
             assertThat(excepcionSesionExpirada.getMessage()).isEqualTo(Sesion.mensajeDeErrorSesionExpirada());
@@ -63,10 +63,10 @@ public class SesionTest {
     @Test
     public void agregarUnLibroAUnCarritoDeUnaSesionYEsta() {
         reloj.setearHoraYMinutos(10, 0);
-        Sesion sesion = Sesion.crearSesion(carrito, cliente, reloj);
+        Sesion sesion = Sesion.crearSesion(carrito, cliente);
         sesion.setUltimoUso(reloj.horaActual());
-        reloj.setearHoraYMinutos(10, 30);
-        sesion.agregarLibroACarrito(libro, 1);
+        reloj.setearHoraYMinutos(10, 29);
+        sesion.agregarLibroACarrito(libro, 1, reloj);
         assertThat(sesion.getCarrito().getItems()).contains(libro);
     }
 }

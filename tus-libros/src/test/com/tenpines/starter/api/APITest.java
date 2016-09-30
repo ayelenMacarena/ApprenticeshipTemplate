@@ -86,7 +86,7 @@ public class APITest extends RESTTestBase {
     @Test
     public void listarVentasParaUnCliente() throws Exception {
         UsuarioPasswordTO usuarioPasswordTO = new UsuarioPasswordTO(1L, "1234");
-        this.mockClient.perform(get(Endpoints.LISTAR_VENTAS, usuarioPasswordTO))
+        this.mockClient.perform(get(Endpoints.LISTAR_VENTAS).sessionAttr("usuario", usuarioPasswordTO))
                 .andExpect(content().contentType(JSON_CONTENT_TYPE))
                 .andExpect(status().is(200))
                 .andExpect(jsonPath("$").value(notNullValue()));

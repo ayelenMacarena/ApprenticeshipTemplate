@@ -2,11 +2,11 @@ package com.tenpines.starter.modelo;
 
 import java.time.LocalDateTime;
 
-public class Reloj {
+public class RelojDePrueba {
 
     LocalDateTime horaActual;
 
-    public Reloj(Integer hora, Integer minutos) {
+    public RelojDePrueba(Integer hora, Integer minutos) {
        horaActual = LocalDateTime.now().withHour(hora).withMinute(minutos);
     }
 

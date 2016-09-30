@@ -6,9 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import java.sql.Timestamp;
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -29,12 +26,11 @@ public class ServicioDeSesion {
     @Autowired
     private ServicioDeVentasConcretadas servicioDeVentasConcretadas;
 
-    @Autowired
-    private Reloj reloj;
+    private RelojDePrueba reloj = new RelojDePrueba(LocalDateTime.now().getHour(),LocalDateTime.now().getMinute());
 
     public Sesion crearCarrito(Cliente unCliente) {
         Carrito carrito = servicioDeCarritos.nuevoCarrito();
-        Sesion nuevaSesion = Sesion.crearSesion(carrito,unCliente, reloj);
+        Sesion nuevaSesion = Sesion.crearSesion(carrito,unCliente);
         repositorio.save(nuevaSesion);
         return nuevaSesion;
     }
@@ -46,7 +42,7 @@ public class ServicioDeSesion {
     }
 
     private void actualizarUltimoUsoDeSesion(Sesion sesion) {
-        sesion.setUltimoUso(LocalDateTime.now());
+        sesion.setUltimoUso(reloj.horaActual());
         repositorio.save(sesion);
     }
 
@@ -69,7 +65,7 @@ public class ServicioDeSesion {
     }
 
     private void chequearSesionExpiradaYActulizarUltimoUso(Sesion sesion) {
-        sesion.chequearSesionExpirada();
+        sesion.chequearSesionExpirada(reloj);
         actualizarUltimoUsoDeSesion(sesion);
     }
 

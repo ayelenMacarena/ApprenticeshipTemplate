@@ -8,7 +8,7 @@ public class RelojTest {
 
     @Test
     public void unRelojDebeSerCreadoConUnaHoraYUnosMinutosValidosYCuandoSeLoPidoDarmeEsaHoraYMinutos(){
-        Reloj reloj1230horas = new Reloj(12,30);
+        RelojDePrueba reloj1230horas = new RelojDePrueba(12,30);
         assertThat(reloj1230horas.obtenerHora()).isEqualTo(12);
         assertThat(reloj1230horas.obtenerMinutos()).isEqualTo(30);
     }
