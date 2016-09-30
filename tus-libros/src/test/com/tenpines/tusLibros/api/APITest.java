@@ -7,14 +7,19 @@ import com.tenpines.tusLibros.servicios.ServicioDeCliente;
 import com.tenpines.tusLibros.servicios.ServicioDeSesion;
 import com.tenpines.tusLibros.web.Endpoints;
 import com.tenpines.tusLibros.web.TransferObjects.UsuarioPasswordTO;
+import org.hamcrest.Description;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.cache.support.NullValue;
+import org.springframework.expression.spel.ast.ValueRef;
 
 import java.util.Arrays;
 
 import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -83,13 +88,15 @@ public class APITest extends RESTTestBase {
 
     @Test
     public void listarVentasParaUnCliente() throws Exception {
-        UsuarioPasswordTO usuarioPasswordTO = new UsuarioPasswordTO(1L, "1234");
-        this.mockClient.perform(get(Endpoints.LISTAR_VENTAS).sessionAttr("usuario", usuarioPasswordTO))
+        UsuarioPasswordTO usuarioPasswordTO = UsuarioPasswordTO.crearUsuarioPasswordTO(1L, "1234");
+        this.mockClient.perform(post(Endpoints.LISTAR_VENTAS, usuarioPasswordTO ))
                 .andExpect(content().contentType(JSON_CONTENT_TYPE))
                 .andExpect(status().is(200))
                 .andExpect(jsonPath("$").value(notNullValue()));
 
     }
+
+
 
 
 

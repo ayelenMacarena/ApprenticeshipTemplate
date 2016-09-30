@@ -92,9 +92,10 @@ public class CarritoController extends GlobalExceptionHandlingController{
         return servicioDeCliente.mostrarClientes();
     }
 
-    @RequestMapping(value=Endpoints.LISTAR_VENTAS, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value=Endpoints.LISTAR_VENTAS, method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    List<VentaConcretada> obtenerVentasParaUnCliente(@ModelAttribute("usuario") UsuarioPasswordTO usuarioPasswordTO){
+    List<VentaConcretada> obtenerVentasParaUnCliente(@RequestBody UsuarioPasswordTO usuarioPasswordTO){
+        //TODO: Esta no es la mejor forma, pero me fallaba si el param era mi objetin.
         Cliente cliente = getCliente(usuarioPasswordTO.getIdUsuario());
         return servicioDeSesion.mostrarVentasParaUnCliente(cliente, usuarioPasswordTO.getPassword());
     }

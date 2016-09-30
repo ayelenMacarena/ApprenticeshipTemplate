@@ -25,9 +25,13 @@ public class UsuarioPasswordTO {
     }
 
 
-    public UsuarioPasswordTO(Long idUsuario, String password){
-        setIdUsuario(idUsuario);
-        setPassword(password);
+    public UsuarioPasswordTO(){}
+
+    public static UsuarioPasswordTO crearUsuarioPasswordTO(Long idUsuario, String password){
+        UsuarioPasswordTO usuarioPasswordTO = new UsuarioPasswordTO();
+        usuarioPasswordTO.setIdUsuario(idUsuario);
+        usuarioPasswordTO.setPassword(password);
+        return usuarioPasswordTO;
     }
 
 }
