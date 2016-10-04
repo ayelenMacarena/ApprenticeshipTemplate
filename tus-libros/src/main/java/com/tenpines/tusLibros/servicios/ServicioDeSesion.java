@@ -106,5 +106,9 @@ public class ServicioDeSesion {
 //        return "No existe sesión para el cliente ingresado";
 //    }
 
+    public List<Sesion> mostrarSesiones(){
+        return repositorio.findAll();
+    }
+
 }
 

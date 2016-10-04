@@ -63,7 +63,7 @@ public class TestIntegracion extends SpringTestBase {
 
         servicioDeSesion.agregarLibro(sesion, libro.getId(), 1);
 
-        assertThat((servicioDeSesion.mostrarLibrosDeCarrito(sesion.getId_sesion())).contains(libro));
+        assertThat((servicioDeSesion.mostrarLibrosDeCarrito(carrito.getId())).contains(libro));
     }
 
     @Test
@@ -100,7 +100,6 @@ public class TestIntegracion extends SpringTestBase {
         sesionExpirada.setUltimoUso(relojDeTest.minusMinutes(31));
 
         try {servicioDeSesion.agregarLibro(sesionExpirada, libro.getId(), 1);
-            TestCase.assertTrue("nunca deberia llegar aca", false);
         } catch (RuntimeException excepcionDeSesionExpirada) {
             assertThat(excepcionDeSesionExpirada.getMessage()).isEqualTo(Sesion.mensajeDeErrorSesionExpirada());
         }
