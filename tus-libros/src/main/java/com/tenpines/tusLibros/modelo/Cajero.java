@@ -19,7 +19,7 @@ public class Cajero {
 
     private Integer precioTotalCompra(Carrito unCarrito) {
 
-        Integer precioTotal = unCarrito.getItems().stream().mapToInt(Libro::getPrecio).sum();
+        Integer precioTotal = unCarrito.getItems().stream().mapToInt(libroPorCarrito -> libroPorCarrito.getLibro().getPrecio() * libroPorCarrito.getCantidad()).sum();
         return precioTotal;
     }
 

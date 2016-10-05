@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @Transactional
@@ -35,7 +36,7 @@ public class ServicioDeSesion {
         return nuevaSesion;
     }
 
-    public List<Libro> mostrarLibrosDeCarrito(Long carritoId) {
+    public Set<PackDeLibros> mostrarLibrosDeCarrito(Long carritoId) {
         Sesion laSesion = buscarSesionParaElCarrito(carritoId);
         chequearSesionExpiradaYActulizarUltimoUso(laSesion);
         return servicioDeCarritos.mostrarLibrosDeCarrito(laSesion.getCarrito().getId());
@@ -51,13 +52,21 @@ public class ServicioDeSesion {
     }
 
     private Sesion buscarSesionParaElCarrito(Long carritoId) {
-        try {
-            Sesion sesion = repositorio.getSesion(carritoId);
-            return sesion;}
-        catch (RuntimeException NoExisteElCarrito) {
-                throw new RuntimeException(mensajeDeErrorCuandoNoExisteElCarritoQueQuiero());
-             }
+        Sesion sesion = repositorio.getSesion(carritoId);
+        if (sesion == null){
+            throw new RuntimeException(mensajeDeErrorCuandoNoExisteElCarritoQueQuiero());
+        }
+        return sesion;
     }
+
+//    private Sesion buscarSesionParaElCarrito(Long carritoId) {
+//        try {
+//            Sesion sesion = repositorio.getSesion(carritoId);
+//            return sesion;}
+//        catch (RuntimeException NoExisteElCarrito) {
+//                throw new RuntimeException(mensajeDeErrorCuandoNoExisteElCarritoQueQuiero());
+//        }
+//    }
 
     public void agregarLibro(Sesion sesion, Long idLibro, Integer cantidad) {
         chequearSesionExpiradaYActulizarUltimoUso(sesion);
@@ -69,7 +78,7 @@ public class ServicioDeSesion {
         actualizarUltimoUsoDeSesion(sesion);
     }
 
-    public List<Libro> obtenerUnCarrito(Long id){
+    public Set<PackDeLibros> obtenerUnCarrito(Long id){
         Sesion sesion = buscarSesionParaElCarrito(id);
         chequearSesionExpiradaYActulizarUltimoUso(sesion);
         return servicioDeCarritos.mostrarLibrosDeCarrito(id);

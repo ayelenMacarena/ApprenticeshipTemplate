@@ -2,8 +2,8 @@ package com.tenpines.tusLibros.modelo;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Carrito implements Serializable, Cloneable{
@@ -12,15 +12,15 @@ public class Carrito implements Serializable, Cloneable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    private List<Libro> items;
+    @OneToMany(fetch = FetchType.EAGER)
+    private Set<PackDeLibros> items;
 
     public Carrito(){
     }
 
     public static Carrito crearCarrito(){
         Carrito carrito = new Carrito();
-        carrito.setItems(new ArrayList<Libro>());
+        carrito.setItems(new HashSet<PackDeLibros>());
         return carrito;
     }
     //PERSISTENCIA
@@ -33,28 +33,51 @@ public class Carrito implements Serializable, Cloneable{
         return id;
     }
 
-    public void setItems(List<Libro> unItem) {
-        this.items = unItem;
+    public void setItems(HashSet<PackDeLibros> items) {
+        this.items = items;
     }
 
-    public List<Libro> getItems() {
+    public Set<PackDeLibros> getItems() {
         return items;
     }
 
     // METODOS
 
 
-
     public Boolean estaVacio() {
         return items.size() == 0;
     }
+        //TODO: ARREGLAR TEST Y ARREGLAR RELACIONES
 
     public void agregarLibro(Libro unLibro, Integer cantidad) {
-        this. verificarQueLaCantidadSeaValida(cantidad);
-        for (int i=0; i<cantidad; i++) {
-            items.add(unLibro);
+        this.verificarQueLaCantidadSeaValida(cantidad);
+        if (this.yaEstaAgregado(unLibro)){
+            this.actualizarCantidad(unLibro,cantidad);
+        }
+        else {
+            this.agregarLibroCantidad(unLibro, cantidad);
         }
     }
+
+    private void agregarLibroCantidad(Libro unLibro, Integer cantidad) {
+        items.add(PackDeLibros.nuevoLibroEnCarrito(this ,unLibro,cantidad));
+    }
+
+    private void actualizarCantidad(Libro unLibro, Integer cantidad) {
+        PackDeLibros libroBuscado = items.stream().filter(libroPorCarrito -> libroPorCarrito.getLibro().equals(unLibro)).findFirst().get();
+        libroBuscado.setCantidad(libroBuscado.getCantidad() + cantidad);
+    }
+
+    private boolean yaEstaAgregado(Libro unLibro) {
+        return items.stream().anyMatch(libroPorCarrito -> libroPorCarrito.getLibro().equals(unLibro));
+    }
+
+//    public void agregarLibro(Libro unLibro, Integer cantidad) {
+//        this. verificarQueLaCantidadSeaValida(cantidad);
+//        for (int i=0; i<cantidad; i++) {
+//            items.add(unLibro);
+//        }
+//    }
 
     private void verificarQueLaCantidadSeaValida(Integer cantidad) {
         if (cantidad <= 0){
@@ -68,12 +91,12 @@ public class Carrito implements Serializable, Cloneable{
 
 
     public Boolean contiene(Libro unItem) {
-        return items.contains(unItem);
+        return items.stream().anyMatch(pack -> pack.getLibro().equals(unItem));
     }
 
     public Integer contidadDeUnItem(final Libro unItem) {
         return Math.toIntExact(
-                items.stream().filter((item) -> item.equals(unItem)).count());
+                items.stream().filter(pack -> pack.getLibro().equals(unItem)).findFirst().get().getCantidad());
     }
 
     public Integer cantidadTotalDeItems() {

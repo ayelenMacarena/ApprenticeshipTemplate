@@ -82,7 +82,6 @@ public class TestIntegracion extends SpringTestBase {
 
         servicioDeSesion.agregarLibro(sesion, libro2.getId(), 1);
 
-
         assertThat((servicioDeSesion.mostrarLibrosDeCarrito(sesion.getId_sesion())).contains(libro));
         assertThat((servicioDeSesion.mostrarLibrosDeCarrito(sesion.getId_sesion())).contains(libro2));
         assertThat((servicioDeSesion.mostrarLibrosDeCarrito(sesion.getId_sesion()).size())).isEqualTo(2);
