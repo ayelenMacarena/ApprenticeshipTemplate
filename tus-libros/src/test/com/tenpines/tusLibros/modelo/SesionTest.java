@@ -62,11 +62,12 @@ public class SesionTest {
 
     @Test
     public void agregarUnLibroAUnCarritoDeUnaSesionYEsta() {
+        PackDeLibros packDeLibros = PackDeLibros.nuevoLibroEnCarrito(carrito, libro, 1);
         reloj.setearHoraYMinutos(10, 0);
         Sesion sesion = Sesion.crearSesion(carrito, cliente);
         sesion.setUltimoUso(reloj.horaActual());
         reloj.setearHoraYMinutos(10, 29);
         sesion.agregarLibroACarrito(libro, 1, reloj);
-        assertThat(sesion.getCarrito().getItems()).contains(libro);
+        assertThat(sesion.getCarrito().getItems()).contains(packDeLibros);
     }
 }

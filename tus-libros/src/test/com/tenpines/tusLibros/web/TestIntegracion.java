@@ -63,7 +63,7 @@ public class TestIntegracion extends SpringTestBase {
 
         servicioDeSesion.agregarLibro(sesion, libro.getId(), 1);
 
-        assertThat((servicioDeSesion.mostrarLibrosDeCarrito(sesion.getId_sesion())).contains(libro));
+        assertThat((servicioDeSesion.mostrarLibrosDeCarrito(carrito.getId())).contains(libro));
     }
 
     @Test
@@ -81,7 +81,6 @@ public class TestIntegracion extends SpringTestBase {
         assertThat((servicioDeSesion.mostrarLibrosDeCarrito(sesion.getId_sesion()).size())).isEqualTo(1);
 
         servicioDeSesion.agregarLibro(sesion, libro2.getId(), 1);
-
 
         assertThat((servicioDeSesion.mostrarLibrosDeCarrito(sesion.getId_sesion())).contains(libro));
         assertThat((servicioDeSesion.mostrarLibrosDeCarrito(sesion.getId_sesion())).contains(libro2));

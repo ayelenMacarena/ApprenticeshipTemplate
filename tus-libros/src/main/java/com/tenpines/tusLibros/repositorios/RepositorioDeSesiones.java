@@ -12,13 +12,13 @@ import java.util.List;
 public interface RepositorioDeSesiones extends JpaRepository<Sesion, Long> {
 
 
-    @Query("select c from Sesion c where c.carrito.id = :carritoId")
+    @Query("select c from Sesion c where c.carrito.id = ?1")
     Sesion getSesion(Long carritoId);
 
-    @Query("select c.carrito from Sesion c where c.cliente.id = :idUsuario")
+    @Query("select c.carrito from Sesion c where c.cliente.id = ?1")
     List<Carrito> getCarritoDeUsuario(Long idUsuario);
 
-    @Query("select u from Sesion u where u.cliente.id = :id")
+    @Query("select u from Sesion u where u.cliente.id = ?1")
     List<Sesion> getSesionParaCliente(Long id);
 
 
