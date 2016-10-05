@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Controller
 public class CarritoController extends GlobalExceptionHandlingController{
@@ -72,7 +73,7 @@ public class CarritoController extends GlobalExceptionHandlingController{
 
     @RequestMapping(value=Endpoints.MOSTRAR_ITEMS, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    List<Libro> obtenerLibro(@RequestParam(value = "carrito") Carrito unCarrito){
+    Set<PackDeLibros> obtenerLibro(@RequestParam(value = "carrito") Carrito unCarrito){
         return servicioDeSesion.mostrarLibrosDeCarrito(unCarrito.getId());
     }
 
@@ -135,8 +136,8 @@ public class CarritoController extends GlobalExceptionHandlingController{
 //        return sesion.getCarrito();
 //    }
 
-    private List<Libro> itemsDeCarrito(Long idCarrito){
-        List<Libro> carrito = servicioDeSesion.obtenerUnCarrito(idCarrito);
+    private Set<PackDeLibros> itemsDeCarrito(Long idCarrito){
+        Set<PackDeLibros> carrito = servicioDeSesion.obtenerUnCarrito(idCarrito);
         return  carrito;
     }
 }
