@@ -63,7 +63,7 @@ public class TestIntegracion extends SpringTestBase {
 
         servicioDeSesion.agregarLibro(sesion, libro.getId(), 1);
 
-        assertThat((servicioDeSesion.mostrarLibrosDeCarrito(carrito.getId())).contains(libro));
+        assertThat((servicioDeSesion.mostrarLibrosDeCarrito(carrito.getId())).contains(PackDeLibros.nuevoLibroEnCarrito(carrito,libro,1)));
     }
 
     @Test
@@ -74,16 +74,18 @@ public class TestIntegracion extends SpringTestBase {
         Carrito carrito = sesion.getCarrito();
         Libro libro = servicioDeCatalogo.agregarLibroAlCatalogo("Guerra de los mundos", "123456789", 45);
         Libro libro2 = servicioDeCatalogo.agregarLibroAlCatalogo("El perfume", "987654321", 75);
+        PackDeLibros pack1 = PackDeLibros.nuevoLibroEnCarrito(carrito,libro,1);
+        PackDeLibros pack2 = PackDeLibros.nuevoLibroEnCarrito(carrito,libro2,1);
 
         servicioDeSesion.agregarLibro(sesion, libro.getId(), 1);
 
-        assertThat((servicioDeSesion.mostrarLibrosDeCarrito(sesion.getId_sesion())).contains(libro));
+        assertThat((servicioDeSesion.mostrarLibrosDeCarrito(sesion.getId_sesion()))).contains(pack1);
         assertThat((servicioDeSesion.mostrarLibrosDeCarrito(sesion.getId_sesion()).size())).isEqualTo(1);
 
         servicioDeSesion.agregarLibro(sesion, libro2.getId(), 1);
 
-        assertThat((servicioDeSesion.mostrarLibrosDeCarrito(sesion.getId_sesion())).contains(libro));
-        assertThat((servicioDeSesion.mostrarLibrosDeCarrito(sesion.getId_sesion())).contains(libro2));
+        assertThat((servicioDeSesion.mostrarLibrosDeCarrito(sesion.getId_sesion())).contains(pack1));
+        assertThat((servicioDeSesion.mostrarLibrosDeCarrito(sesion.getId_sesion())).contains(pack2));
         assertThat((servicioDeSesion.mostrarLibrosDeCarrito(sesion.getId_sesion()).size())).isEqualTo(2);
     }
 

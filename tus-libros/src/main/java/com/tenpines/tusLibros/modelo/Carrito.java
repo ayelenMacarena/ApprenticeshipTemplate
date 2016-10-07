@@ -3,6 +3,7 @@ package com.tenpines.tusLibros.modelo;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -12,7 +13,7 @@ public class Carrito implements Serializable, Cloneable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<PackDeLibros> items;
 
     public Carrito(){
@@ -101,6 +102,23 @@ public class Carrito implements Serializable, Cloneable{
 
     public Integer cantidadTotalDeItems() {
         return items.size();
+    }
+
+    @Override
+    public boolean equals(Object objeto){
+        if (objeto == null){
+            return false;
+        }
+        if (!(objeto instanceof Carrito)){
+            return false;
+        }
+        Carrito carrito = (Carrito) objeto;
+
+        if(carrito.getItems().equals(this.getItems())){
+            return false;
+        }
+
+        return true;
     }
 
 

@@ -73,10 +73,10 @@ public class PackDeLibros {
         }
         PackDeLibros pack = (PackDeLibros) objeto;
 
-        if (!(Objects.equals(pack.getLibro(), this.getLibro()))){
+        if (!(pack.getLibro().equals(this.getLibro()))){
             return false;
         }
-        if (!(Objects.equals(pack.getCarrito(), this.getCarrito()))){
+        if (!(pack.getCarrito().equals(this.getCarrito()))){
             return false;
         }
         return true;
