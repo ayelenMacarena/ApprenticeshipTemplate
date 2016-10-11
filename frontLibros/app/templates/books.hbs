@@ -3,7 +3,7 @@
 </div>
 <div align="centre" class="row">
     <div align="centre" class="col-md-6">
-        <table align="centre" class="table">
+        <table class="table table-striped">
             <thead>
             <tr>
 
@@ -14,9 +14,9 @@
             </thead>
             {{#each model as |book|}}
             <tbody>
-                <th>{{book.isbn}}</th>
-                <th>{{ book.titulo }}</th>
-                <th>{{book.precio}}</th>
+                <td>{{book.isbn}}</td>
+                <td>{{ book.titulo}}</td>
+                <td>{{book.precio}}</td>
 
                 <br>
             </tbody>

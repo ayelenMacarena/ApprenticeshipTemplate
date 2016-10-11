@@ -11,5 +11,6 @@ public class Endpoints {
     public static final String COBRAR_CARRITO = HOME + "/checkoutCart";
     public static final String COBRAR_CARRITO_PAGINA = "/cobrarCarrito";
     public static final String LISTAR_VENTAS = "/listarVentas";
+    public static final String OBTENER_LIBROS = "/books";
 
 }
