@@ -1,5 +1,6 @@
 /* jshint node: true */
 
+//noinspection JSUnresolvedVariable
 module.exports = function(environment) {
   var ENV = {
     modulePrefix: 'front-libros',
