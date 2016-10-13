@@ -100,9 +100,15 @@ public class CarritoController extends GlobalExceptionHandlingController{
         return servicioDeSesion.mostrarVentasParaUnCliente(cliente, usuarioPasswordTO.getPassword());
     }
 
-    @RequestMapping(value=Endpoints.OBTENER_LIBROS, method= RequestMethod.GET,  produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value=Endpoints.LIBROS, method= RequestMethod.GET,  produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     List<Libro> obtenerLibros(){ return servicioCatalogo.mostrarCatalogo();}
+
+    @RequestMapping(value=Endpoints.LIBROS, method=RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @ResponseBody
+    Libro crearLibro(@RequestBody Libro libro){
+        return servicioCatalogo.agregarLibroAlCatalogo(libro.getNombreLibro(),libro.getIsbn(),libro.getPrecio());
+    }
 
     private Cliente getCliente(Long unId) {
         return servicioDeCliente.buscarElCliente(unId);

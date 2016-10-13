@@ -1,0 +1,41 @@
+<div class="container">
+<h3>Crear libro</h3>
+<body>
+
+<hr>
+<form method="get">
+    <div class="form-signin col-md-3 col-md-offset-2 ">
+    <p>
+
+        <label for="nombreLibro">Título: </label>
+
+        {{input type="text" name="nombreLibro" id="nombreLibro" value=model.nombreLibro}}
+
+        <br/> <br/>
+
+        <label for="isbn">ISBN: </label>
+
+        {{input type="text" name="isbn" id="isbn" value=model.isbn}}
+
+        <br/> <br/>
+
+        <label for="precio">Precio: </label>
+
+        {{input type="number" name="precio" id="precio" value=model.precio}}
+
+        <br/> <br/>
+
+
+        <input type="submit" value="Enviar" {{action "crearLibro"}}>
+
+        <input type="reset">
+
+    </p>
+    </div>
+</form>
+
+</body>
+
+</div>
+<hr>
+  {{outlet}}
