@@ -9,6 +9,8 @@ const Router = Ember.Router.extend({
 Router.map(function() {
   this.route('book');
   this.route('createBook');
+  this.route('sesion');
+  this.route('client');
 });
 
 

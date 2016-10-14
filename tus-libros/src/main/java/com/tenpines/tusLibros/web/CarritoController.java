@@ -53,7 +53,7 @@ public class CarritoController extends GlobalExceptionHandlingController{
     }
 
 
-    @RequestMapping(value = Endpoints.CARRITO, method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = Endpoints.LOGIN, method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     SesionConClienteTO crearUnCarrito(@RequestBody UsuarioPasswordTO usuarioPasswordTO, HttpServletResponse response) throws IOException {
         Cliente unCliente = servicioDeCliente.buscarElCliente(usuarioPasswordTO.getIdUsuario());
@@ -86,12 +86,12 @@ public class CarritoController extends GlobalExceptionHandlingController{
         unCliente = servicioDeCliente.clienteLogueado(idUsuario, password);
         return unCliente;
     }
-
-    @RequestMapping(value=Endpoints.CLIENTE, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ResponseBody
-    List<Cliente> obtenerCliente(){
-        return servicioDeCliente.mostrarClientes();
-    }
+//
+//    @RequestMapping(value=Endpoints.LOGUEAR_CLIENTE, method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+//    @ResponseBody
+//    List<Cliente> obtenerCliente(){
+//        return servicioDeCliente.mostrarClientes();
+//    }
 
     @RequestMapping(value=Endpoints.LISTAR_VENTAS, method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
